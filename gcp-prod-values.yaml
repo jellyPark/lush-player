@@ -1,0 +1,32 @@
+# Default values for golang.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+serviceName: "java"
+
+serviceType: "microservice"
+
+serviceScope: "examples"
+
+serviceVersion: "0.0.1"
+
+replicas: 3
+
+pullPolicy: "Always"
+
+podAutoscaling: 1
+
+developmentVolumeMapping: 0
+
+serviceIngress: 0
+
+chartVersion: "9.0.0-stable"
+
+# Additional environment variables required by the service.
+# Specied in the pattern - name: value. Example:
+#
+# envVars:
+#   A_NEW_VARIABLE: test
+#   ANOTHER_VARIABLE: wibble
+envVars:

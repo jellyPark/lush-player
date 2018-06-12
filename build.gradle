@@ -1,0 +1,39 @@
+group 'com.lush'
+// Version is currently not used.
+// when the application is running there will be an ENV variable which will contain the version of the application
+version '0.0.0'
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+bootDistTar.archiveName = "service.tar"
+
+buildscript {
+    ext {
+        springBootVersion = '2.0.0.M6'
+    }
+    repositories {
+        mavenCentral()
+        maven { url 'https://repo.spring.io/libs-snapshot' }
+        maven { url 'https://repo.spring.io/libs-milestone' }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/libs-snapshot' }
+    maven { url 'https://repo.spring.io/libs-milestone' }
+}
+
+dependencies {
+    compile group: 'org.springframework.boot', name: "spring-boot-starter-web", version: "${springBootVersion}"
+    testCompile group: 'junit', name: 'junit', version: '4.4'
+    compile 'com.google.code.gson:gson:2.8.2'
+}

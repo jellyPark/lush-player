@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  build-cache:
+    image: gradle
+    command: gradle -Dorg.gradle.daemon=false --stacktrace bootDistTar
+    working_dir: /home/gradle/SERVICE_PATH
+    env_file:
+      - .env
+    volumes:
+      - ./.gradle-docker-cache:/home/gradle/.gradle
+      - ./:/home/gradle/SERVICE_PATH
+    networks:
+      - service-network
+  service:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    networks:
+      - service-network
+
+networks:
+  service-network:
+    driver: bridge
