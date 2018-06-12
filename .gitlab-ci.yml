@@ -7,6 +7,8 @@ variables:
   # Application deployment domain
   KUBE_DOMAIN: platformserviceaccount.com
   KUBE_DOMAIN_PROD: cloudserviceaccount.com
+  AGGREGATOR_DOMAIN_PREFIX: agg
+
 
 stages:
   - pre-ci-review
@@ -32,12 +34,12 @@ build:
 pre-ci-review:
   stage: pre-ci-review
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
     - command pre-ci
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    url: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   only:
     - branches
   except:
@@ -46,12 +48,12 @@ pre-ci-review:
 pre-ci-staging:
   stage: pre-ci-staging
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
   script:
     - command pre-ci
   environment:
     name: staging
-    url: http://$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
   only:
     - master
     - tags
@@ -59,12 +61,12 @@ pre-ci-staging:
 pre-ci-production:
   stage: pre-ci-production
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
   script:
     - command pre-ci
   environment:
     name: production
-    url: http://$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
   when: manual
   only:
     - master
@@ -73,12 +75,12 @@ pre-ci-production:
 review:
   stage: review
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
     - command java-aggregator-deploy
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    url: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
     on_stop: cleanup
   only:
     - branches
@@ -88,12 +90,12 @@ review:
 staging:
   stage: staging
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
   script:
     - command java-aggregator-deploy
   environment:
     name: staging
-    url: http://$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
   only:
     - master
     - tags
@@ -101,12 +103,12 @@ staging:
 production:
   stage: production
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
   script:
     - command java-aggregator-deploy
   environment:
     name: production
-    url: http://$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
   when: manual
   only:
     - master
@@ -130,12 +132,12 @@ cleanup:
 post-cd-review:
   stage: post-cd-review
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
     - command post-cd
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    url: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   only:
     - branches
   except:
@@ -144,12 +146,12 @@ post-cd-review:
 post-cd-staging:
   stage: post-cd-staging
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
   script:
     - command post-cd
   environment:
     name: staging
-    url: http://$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
   only:
     - master
     - tags
@@ -157,12 +159,12 @@ post-cd-staging:
 post-cd-production:
   stage: post-cd-production
   variables:
-    CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
+    CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
   script:
     - command post-cd
   environment:
     name: production
-    url: http://$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
+    url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
   when: manual
   only:
     - master
