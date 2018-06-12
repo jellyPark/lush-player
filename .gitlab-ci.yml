@@ -24,7 +24,7 @@ stages:
 build:
   stage: build
   script:
-    - command java-build
+    - command java-aggregator-aggregator-build
   only:
     - branches
     - tags
@@ -75,7 +75,7 @@ review:
   variables:
     CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
-    - command java-deploy
+    - command java-aggregator-deploy
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
@@ -90,7 +90,7 @@ staging:
   variables:
     CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
   script:
-    - command java-deploy
+    - command java-aggregator-deploy
   environment:
     name: staging
     url: http://$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
@@ -103,7 +103,7 @@ production:
   variables:
     CI_ENVIRONMENT_URL: http://$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
   script:
-    - command java-deploy
+    - command java-aggregator-deploy
   environment:
     name: production
     url: http://$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
@@ -117,7 +117,7 @@ cleanup:
   variables:
     GIT_STRATEGY: none
   script:
-    - command java-destroy
+    - command java-aggregator-destroy
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
