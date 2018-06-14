@@ -21,7 +21,7 @@ k8s-init: update-context
 k8s-up: update-context
 	@eval $$(minikube docker-env --shell=bash) ;\
 	docker build -f ./Dockerfile -t $(SERVICE_NAME):$(TIMESTAMP) .
-	helm upgrade --install --namespace $(NAMESPACE) --values local-values.yaml --set serviceName="$(SERVICE_NAME)-master-local",serviceNamespace="$(NAMESPACE)",ciEnvironmentSlug="local",ciPipelineId="1",ciBuildId="1",privateRegistryKey="priregistrykey",ciEnvironmentHostname="localhost",serviceEnvironment="local",serviceBranch="master",developmentVolumeMapping=false,pullPolicy="IfNotPresent",serviceImage="$(SERVICE_NAME)",serviceImageTag="$(TIMESTAMP)" $(SERVICE_NAME)-master-local soa-charts/php-aggregator
+	helm upgrade --install --namespace $(NAMESPACE) --values local-values.yaml --set serviceName="$(SERVICE_NAME)-master-local",serviceNamespace="$(NAMESPACE)",ciEnvironmentSlug="local",ciPipelineId="1",ciBuildId="1",privateRegistryKey="priregistrykey",ciEnvironmentHostname="localhost",serviceEnvironment="local",serviceBranch="master",developmentVolumeMapping=false,pullPolicy="IfNotPresent",serviceImage="$(SERVICE_NAME)",serviceImageTag="$(TIMESTAMP)" $(SERVICE_NAME)-master-local soa-charts/java-aggregator
 
 k8s-down: update-context
 	helm delete $(SERVICE_NAME)-master-local --purge
