@@ -1,5 +1,4 @@
-ARG BASE_IMAGE=registry.platformserviceaccount.com/lush-soa/base-service/java-aggregator:latest
-FROM $BASE_IMAGE
+FROM registry.platformserviceaccount.com/lush-soa/base-service/java-aggregator:latest
 
 COPY build/distributions/service.tar /service/service.tar
 
