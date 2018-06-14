@@ -5,15 +5,11 @@ K8S_HOST=minikube
 
 ifeq ($(findstring aggregators,$(CURDIR)),aggregators)
 	SERVICE_NAME=agg-$(shell basename $(CURDIR))
-  $(warning ######  service name 1 $(SERVICE_NAME)
 else
 	SERVICE_NAME=$(shell basename $(CURDIR))
-	$(warning ######  service name 2 $(SERVICE_NAME)
 endif
 
 NAMESPACE=$(SERVICE_NAME)-$(VERSION)
-
-$(warning ######  service name 2 $(NAMESPACE)
 
 update-context:
 	kubectl config use-context $(K8S_HOST)
