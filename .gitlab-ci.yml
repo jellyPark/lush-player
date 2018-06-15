@@ -9,7 +9,6 @@ variables:
   KUBE_DOMAIN_PROD: cloudserviceaccount.com
   AGGREGATOR_DOMAIN_PREFIX: agg
 
-
 stages:
   - pre-ci-review
   - pre-ci-staging
