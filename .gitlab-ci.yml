@@ -22,14 +22,6 @@ stages:
   - post-cd-staging
   - post-cd-production
 
-build:
-  stage: build
-  script:
-    - command java-aggregator-build
-  only:
-    - branches
-    - tags
-
 pre-ci-review:
   stage: pre-ci-review
   variables:
@@ -69,6 +61,14 @@ pre-ci-production:
   when: manual
   only:
     - master
+    - tags
+
+build:
+  stage: build
+  script:
+    - command java-aggregator-build
+  only:
+    - branches
     - tags
     
 review:
