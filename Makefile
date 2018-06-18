@@ -17,3 +17,4 @@ clean:
 
 docker-compose-up: build_artefact_docker
 	docker-compose up --build
+
