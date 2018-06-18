@@ -1,7 +1,7 @@
 # This file is a template, and might need editing before it works on your project.
 # Explanation on the scripts:
 # https://gitlab.com/gitlab-examples/kubernetes-deploy/blob/master/README.md
-image: registry.platformserviceaccount.com/lush-soa/dev-ops/soa-cicd:latest
+image: registry.platformserviceaccount.com/lush-soa/dev-ops/soa-cicd:stable
 
 variables:
   # Application deployment domain
@@ -21,6 +21,14 @@ stages:
   - post-cd-review
   - post-cd-staging
   - post-cd-production
+
+build:
+  stage: build
+  script:
+    - command java-aggregator-build
+  only:
+    - branches
+    - tags
 
 pre-ci-review:
   stage: pre-ci-review
@@ -61,14 +69,6 @@ pre-ci-production:
   when: manual
   only:
     - master
-    - tags
-
-build:
-  stage: build
-  script:
-    - command java-aggregator-build
-  only:
-    - branches
     - tags
 
 review:
