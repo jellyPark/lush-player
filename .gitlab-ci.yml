@@ -10,7 +10,7 @@ variables:
   AGGREGATOR_DOMAIN_PREFIX: agg
 
 stages:
-  - pre-ci-review 
+  - pre-ci-review  
   - pre-ci-staging
   - pre-ci-production
   - build
