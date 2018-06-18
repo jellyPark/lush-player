@@ -70,7 +70,7 @@ build:
   only:
     - branches
     - tags
-    
+
 review:
   stage: review
   variables:

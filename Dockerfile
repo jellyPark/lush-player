@@ -1,4 +1,4 @@
-FROM registry.platformserviceaccount.com/lush-soa/base-service/java:stable
+FROM registry.platformserviceaccount.com/lush-soa/base-service/java-aggregator:stable
 
 COPY build/distributions/service.tar /service/service.tar
 
