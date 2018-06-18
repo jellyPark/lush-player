@@ -5,15 +5,21 @@
 
 serviceName: "java-aggregator"
 
-serviceType: "microservice"
+dbHost: "127.0.0.1"
 
-serviceScope: "examples"
+dbUser: "proxyUser"
 
-serviceVersion: "0.0.1"
+dbPass: ""
+
+redisHost: "127.0.0.1"
 
 replicas: 3
 
 pullPolicy: "Always"
+
+projectZone: "europe-west1"
+
+projectId: "soa-prod"
 
 podAutoscaling: 1
 
@@ -23,6 +29,12 @@ serviceIngress: 0
 
 chartVersion: "9.0.0-stable"
 
+cloudSql: 1
+
+serviceEnvironment: "staging"
+
+serviceTag: ""
+
 # Additional environment variables required by the service.
 # Specied in the pattern - name: value. Example:
 #
@@ -30,3 +42,11 @@ chartVersion: "9.0.0-stable"
 #   A_NEW_VARIABLE: test
 #   ANOTHER_VARIABLE: wibble
 envVars:
+
+extraCommands:
+# Additional artisan commands that need to run as pods.
+#
+# extraCommands:
+#   - name: "My Command"
+#     command: script.sh
+#     args: ["--verbose"]

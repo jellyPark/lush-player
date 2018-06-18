@@ -1,5 +1,6 @@
 .gradle-docker-cache
 
+*.iml
 # Created by https://www.gitignore.io/api/go,gradle,intellij
 
 ### Go ###
@@ -101,3 +102,8 @@ gradle-app.setting
 
 # End of https://www.gitignore.io/api/go,gradle,intellij
 .idea/
+.classpath
+.project
+.settings
+bin/
+build/
