@@ -76,7 +76,7 @@ review:
   variables:
     CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
   script:
-    - command java-aggregator-deploy
+    - command java-deploy
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
@@ -91,7 +91,7 @@ staging:
   variables:
     CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
   script:
-    - command java-aggregator-deploy
+    - command java-deploy
   environment:
     name: staging
     url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME-staging.$KUBE_DOMAIN
@@ -104,7 +104,7 @@ production:
   variables:
     CI_ENVIRONMENT_URL: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
   script:
-    - command java-aggregator-deploy
+    - command java-deploy
   environment:
     name: production
     url: http://$AGGREGATOR_DOMAIN_PREFIX-$CI_PROJECT_NAME.$KUBE_DOMAIN_PROD
@@ -118,7 +118,7 @@ cleanup:
   variables:
     GIT_STRATEGY: none
   script:
-    - command java-aggregator-destroy
+    - command java-destroy
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
