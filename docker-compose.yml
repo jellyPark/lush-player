@@ -12,10 +12,45 @@ services:
       - ./:/home/gradle/SERVICE_PATH
     networks:
       - service-network
+
+  redis-master:
+    image: redis:alpine
+    ports:
+      - "6379"
+    networks:
+      - service-network
+
+  redis-slave:
+    image: lushdigital/docker-redis-slave
+    environment:
+      REDIS_MASTER_SERVICE_HOST: "redis-master"
+      REDIS_MASTER_SERVICE_PORT: "6379"
+    ports:
+      - "6379"
+    depends_on:
+      - redis-master
+    networks:
+      - service-network
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: service-db
+      MYSQL_USER: service-user
+      MYSQL_PASSWORD: my-secret-pw
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+    restart: always
+    networks:
+      - service-network
+
   service:
     build: .
     env_file:
       - .env
+    depends_on:
+      - redis-master
+      - redis-slave
+      - mysql
     ports:
       - "80:80"
     networks:
