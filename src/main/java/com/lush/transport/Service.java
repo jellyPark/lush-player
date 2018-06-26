@@ -1,4 +1,4 @@
-package com.lush.javaAggregator.transport;
+package com.lush.transport;
 
 import com.lush.javaAggregator.eums.ResponseStatusType;
 import com.lush.javaAggregator.modles.Response;
