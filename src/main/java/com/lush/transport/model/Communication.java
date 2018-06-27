@@ -1,5 +1,6 @@
 package com.lush.transport.model;
 
+import lombok.Data;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpRequest;
 import sun.net.www.http.HttpClient;
@@ -8,6 +9,7 @@ import sun.net.www.http.HttpClient;
  * Responsible for communication with a service.
  */
 @ComponentScan
+@Data
 public class Communication {
 
   /**

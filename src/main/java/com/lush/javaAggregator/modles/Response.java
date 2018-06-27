@@ -32,10 +32,10 @@ public class Response {
    */
   private Object data;
 
-//  /**
-//   * Response Pagination Info.
-//   */
-//  private PaginationDto pagination;
+  /**
+   * Response Pagination Info.
+   */
+  private Pagination pagination;
 
   /**
    * Default constructor.
@@ -132,17 +132,17 @@ public class Response {
     this.data = data;
   }
 
-//  /**
-//   * Get Pagination Data
-//   */
-//  public PaginationDto getPagination() {
-//    return pagination;
-//  }
-//
-//  /**
-//   * Set Pagination Data
-//   */
-//  public void setPagination(PaginationDto pagination) {
-//    this.pagination = pagination;
-//  }
+  /**
+   * Get Pagination Data
+   */
+  public Pagination getPagination() {
+    return pagination;
+  }
+
+  /**
+   * Set Pagination Data
+   */
+  public void setPagination(Pagination pagination) {
+    this.pagination = pagination;
+  }
 }
