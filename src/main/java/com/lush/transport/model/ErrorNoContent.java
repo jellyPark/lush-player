@@ -1,6 +1,6 @@
 package com.lush.transport.model;
 
-import com.lush.javaAggregator.resources.Resource.Transport;
+import com.lush.transport.Transport;
 import lombok.Data;
 import org.springframework.context.annotation.ComponentScan;
 

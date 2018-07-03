@@ -1,14 +1,17 @@
 package com.lush.javaAggregator.resources;
 
+import com.lush.transport.Transport;
 import com.lush.transport.model.Communication;
-import org.springframework.context.annotation.ComponentScan;
+import com.lush.transport.model.Request;
 
 /**
  * RemoteResource type representing a service and it's requests
  * it is ok to add more fields and requests.
  */
-@ComponentScan
-public class RemoteResource {
+public interface RemoteResource extends Transport {
 
-  private Communication communication;
+  Communication communication();
+
+  Request request();
+
 }

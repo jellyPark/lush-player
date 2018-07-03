@@ -1,7 +1,7 @@
 package com.lush.transport;
 
+import com.lush.transport.model.Request;
 import com.sun.deploy.net.HttpResponse;
-import org.springframework.http.HttpRequest;
 
 /**
  * Interface responsible for communication.
@@ -12,9 +12,8 @@ public interface Transport {
    * Do the current service request.
    *
    * @return
-   * @throws Exception
    */
-  HttpResponse Call() throws Exception;
+  HttpResponse Call();
 
   /**
    * Create a request to a service resource.
@@ -22,7 +21,7 @@ public interface Transport {
    * @return
    * @throws Exception
    */
-  HttpRequest Dial() throws Exception;
+  Request Dial() throws Exception;
 
   /**
    * Get the name of the service.
@@ -30,5 +29,5 @@ public interface Transport {
    * @return
    * @throws Exception
    */
-  String getName() throws Exception;
+  String getName();
 }
