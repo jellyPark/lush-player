@@ -3,8 +3,9 @@ package com.lush.transport;
 import com.lush.transport.model.Communication;
 import com.lush.transport.model.Config;
 import com.lush.transport.model.Request;
-import com.sun.deploy.net.HttpRequest;
 import com.sun.deploy.net.HttpResponse;
+import java.util.Iterator;
+import java.util.Map;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,10 +33,9 @@ public class Service {
    *
    * @param comm
    * @param request
-   * @return
    * @throws Exception
    */
-  public HttpRequest dial(Communication comm, HttpRequest request) throws Exception {
+  public void dial(Communication comm, Request request) throws Exception {
     // Variable
     String namespace = comm.getNamespace();
     String name = comm.getName();
@@ -48,6 +48,7 @@ public class Service {
         // Do nothing.
       } else {
         name = String.join("-", new String[]{aggregatorDomainPrefix, name});
+        comm.setName(name);
       }
     }
 
@@ -63,10 +64,29 @@ public class Service {
     String dnsName = buildServiceDNSName(name, comm.getBranch(), comm.getEnvironment(),
         serviceNamespace);
 
-    // Build the resource URL. **************
-    String resourceURL = String.format("%s://%s/%s", request, dnsName, request);
+    // Build the resource URL.
+    String resourceURL = String
+        .format("%s://%s/%s", request.getProtocol(), dnsName, request.getResource());
 
-    return null;
+    // Append the query string if we have any.
+    // query 부분은 조금더 확인이 필요함.
+    String query = request.getUrl().getQuery();
+    if (query.length() > 0) {
+      resourceURL = String.format("%s?%s", resourceURL, query);
+    }
+
+    // Create the request
+    // request를 재정의 할수가 없다.
+    comm.setCurrentRequest(null);
+
+    // Add the headers.
+    Map<String, String> headers = request.getHeaders();
+    Iterator it = headers.keySet().iterator();
+    while (it.hasNext()) {
+      String key = (String) it.next();
+      String value = headers.get(key);
+      // Key Value 셋팅할 방법이 없음
+    }
   }
 
   /**

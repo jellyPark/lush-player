@@ -1,8 +1,8 @@
 package com.lush.transport.model;
 
+import javax.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpRequest;
 import sun.net.www.http.HttpClient;
 
 /**
@@ -20,7 +20,7 @@ public class Communication {
   /**
    * Current HTTP request being actioned.
    */
-  private HttpRequest currentRequest;
+  private HttpServletRequest currentRequest;
 
   /**
    * CI environment the service operates in.

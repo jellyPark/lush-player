@@ -1,5 +1,6 @@
 package com.lush.transport.model;
 
+import java.net.URL;
 import java.util.Map;
 import lombok.Data;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,6 +11,12 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan
 @Data
 public class Request {
+
+  /**
+   * Query string values.
+   * Java에서는 Query를 바로 사용할수가 없어서 URL 받음.
+   */
+  private URL url;
 
   /**
    * HTTP method/verb for the request.
