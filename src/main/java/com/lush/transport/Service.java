@@ -1,9 +1,7 @@
 package com.lush.transport;
 
-import com.lush.transport.model.Communication;
 import com.lush.transport.model.Config;
 import com.lush.transport.model.Request;
-import com.sun.deploy.net.HttpResponse;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,10 +18,10 @@ public class Service {
    * @return
    * @throws Exception
    */
-  public HttpResponse call(Communication communication) throws Exception {
-    //communication.getClient().
-    return null;
-  }
+//  public HttpResponse call(Communication communication) throws Exception {
+//    //communication.getClient().
+//    return null;
+//  }
 
   /**
    * Method name : getProtocol.

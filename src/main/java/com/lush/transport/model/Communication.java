@@ -3,7 +3,6 @@ package com.lush.transport.model;
 import lombok.Data;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpRequest;
-import sun.net.www.http.HttpClient;
 
 /**
  * Responsible for communication with a service.
@@ -45,5 +44,5 @@ public class Communication {
   /**
    * http client implementation.
    */
-  private HttpClient client;
+//  private HttpClient client;
 }

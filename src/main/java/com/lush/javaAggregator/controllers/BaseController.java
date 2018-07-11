@@ -27,10 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * ActuatorController
+ * BaseController
  *
  * Class that receives health check for services and endpoint information requests.
- *
  */
 @ControllerAdvice
 @RestController
