@@ -39,9 +39,9 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.7-dmr'
     compileOnly group: 'org.projectlombok', name: 'lombok'
 
-    compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE'
-    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
+//    compile 'org.springframework.boot:spring-boot-starter-security'
+//    compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE'
+//    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
     compile group: 'org.flywaydb', name: 'flyway-core'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'

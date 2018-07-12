@@ -41,11 +41,8 @@ public class Resource {
         throw new BaseException("could not dial service " + remoteResource.getName());
       }
 
-//      // 원격 resource를 call한 아이가 있는지 확인
-//      if (remoteResource.Call() != null) {
-////        log.debug("error calling rpc: " + err.getStackTrace());
-//        throw new BaseException();
-//      }
+//
+
 
     }
     return null;

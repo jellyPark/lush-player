@@ -6,13 +6,16 @@ import com.lush.javaAggregator.repositories.TestRepositories;
 import com.lush.javaAggregator.repositories.UserRepository;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 @Service
-public class TestService implements UserDetailsService {
+public class TestService
+//    implements UserDetailsService
+{
 
   @Autowired
   private TestRepositories testRepositories;
@@ -20,19 +23,19 @@ public class TestService implements UserDetailsService {
   @Autowired
   private UserRepository userRepository;
 
-  @Autowired
-  private UserDetailsService userDetailsService;
+//  @Autowired
+//  private UserDetailsService userDetailsService;
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-    User user = userRepository.findByUsername(username);
-    if (user == null) {
-      throw new UsernameNotFoundException("UsernameNotFound [" + username + "]");
-    }
-    UserDetails loginUser = createUser(user);
-    return loginUser;
-  }
+//  @Override
+//  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//
+//    User user = userRepository.findByUsername(username);
+//    if (user == null) {
+//      throw new UsernameNotFoundException("UsernameNotFound [" + username + "]");
+//    }
+//    UserDetails loginUser = createUser(user);
+//    return loginUser;
+//  }
 
   private LoginUser createUser(User user) {
     LoginUser loginUser = new LoginUser(user);

@@ -3,10 +3,11 @@ package com.lush.transport;
 import com.lush.transport.model.Communication;
 import com.lush.transport.model.Config;
 import com.lush.transport.model.Request;
-import com.sun.deploy.net.HttpResponse;
 import java.util.Iterator;
 import java.util.Map;
 import org.springframework.stereotype.Component;
+
+//import com.sun.deploy.net.HttpResponse;
 
 /**
  * Class for http protocol util.
@@ -22,10 +23,10 @@ public class Service {
    * @return
    * @throws Exception
    */
-  public HttpResponse call(Communication comm) throws Exception {
-    comm.getCurrentRequest();
-    return null;
-  }
+//  public HttpResponse call(Communication comm) throws Exception {
+//    comm.getCurrentRequest();
+//    return null;
+//  }
 
   /**
    * Method name : dial.
