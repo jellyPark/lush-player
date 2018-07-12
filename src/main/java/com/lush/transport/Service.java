@@ -5,9 +5,9 @@ import com.lush.transport.model.Config;
 import com.lush.transport.model.Request;
 import java.util.Iterator;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
-
-//import com.sun.deploy.net.HttpResponse;
 
 /**
  * Class for http protocol util.
@@ -23,10 +23,11 @@ public class Service {
    * @return
    * @throws Exception
    */
-//  public HttpResponse call(Communication comm) throws Exception {
-//    comm.getCurrentRequest();
-//    return null;
-//  }
+  public HttpServletResponse call(Communication comm) throws Exception {
+    HttpServletRequest request = comm.getCurrentRequest();
+    //request.get
+    return null;
+  }
 
   /**
    * Method name : dial.

@@ -43,6 +43,7 @@ dependencies {
 //    compile 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE'
 //    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
     compile group: 'org.flywaydb', name: 'flyway-core'
+    compile 'org.apache.httpcomponents:httpclient:4.5'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
