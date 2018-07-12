@@ -2,8 +2,8 @@ package com.lush.transport.model;
 
 import javax.servlet.http.HttpServletRequest;
 import lombok.Data;
+import org.apache.http.client.HttpClient;
 import org.springframework.context.annotation.ComponentScan;
-import sun.net.www.http.HttpClient;
 
 /**
  * Responsible for communication with a service.

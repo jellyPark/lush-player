@@ -3,10 +3,10 @@ package com.lush.transport;
 import com.lush.transport.model.Communication;
 import com.lush.transport.model.Config;
 import com.lush.transport.model.Request;
-import com.sun.deploy.net.HttpResponse;
 import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,7 +23,7 @@ public class Service {
    * @return
    * @throws Exception
    */
-  public HttpResponse call(Communication comm) throws Exception {
+  public HttpServletResponse call(Communication comm) throws Exception {
     HttpServletRequest request = comm.getCurrentRequest();
     //request.get
     return null;

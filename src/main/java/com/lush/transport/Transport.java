@@ -1,7 +1,6 @@
 package com.lush.transport;
 
 import com.lush.transport.model.Request;
-import com.sun.deploy.net.HttpResponse;
 
 /**
  * Interface responsible for communication.
@@ -10,10 +9,8 @@ public interface Transport {
 
   /**
    * Do the current service request.
-   *
-   * @return
    */
-  HttpResponse Call();
+//  HttpResponse Call();
 
   /**
    * Create a request to a service resource.
@@ -25,9 +22,6 @@ public interface Transport {
 
   /**
    * Get the name of the service.
-   *
-   * @return
-   * @throws Exception
    */
   String getName();
 }
