@@ -6,6 +6,7 @@ import com.lush.transport.model.Request;
 import com.sun.deploy.net.HttpResponse;
 import java.util.Iterator;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,7 +24,8 @@ public class Service {
    * @throws Exception
    */
   public HttpResponse call(Communication comm) throws Exception {
-    comm.getCurrentRequest();
+    HttpServletRequest request = comm.getCurrentRequest();
+    //request.get
     return null;
   }
 
