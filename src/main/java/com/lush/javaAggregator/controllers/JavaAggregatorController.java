@@ -1,7 +1,10 @@
 package com.lush.javaAggregator.controllers;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @RestController
 public class JavaAggregatorController {
@@ -36,6 +39,22 @@ public class JavaAggregatorController {
 
   public String c() {
     return "C";
+  }
+  @GetMapping("/findserviceuri/2")
+  public String findServiceUri() {
+    new JavaAggregatorController().d();
+    return "done";
+  }
+
+  void d() {
+    e();
+  }
+
+  public void e() {
+    String baseEnvLinkURL=null;
+    HttpServletRequest currentRequest =
+        ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+    System.out.println("URI   :   " + currentRequest.getRequestURI());
   }
 
 }
