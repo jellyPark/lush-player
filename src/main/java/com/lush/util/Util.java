@@ -16,4 +16,9 @@ public class Util {
     return request.getMethod();
   }
 
+  public String getUri() {
+    System.out.println("Request URL :: " + request.getRequestURL());
+    System.out.println("Request URI :: " + request.getRequestURI());
+    return request.getRequestURI();
+  }
 }
