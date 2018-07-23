@@ -45,4 +45,17 @@ public class JavaAggregatorController {
     Response response = new Response();
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
+
+  @GetMapping(value = "/{targetService}/health")
+  public ResponseEntity<Object> serverHealth(@PathVariable String targetService) {
+
+    String targetURL = "https://" + targetService + "-staging.platformserviceaccount.com/healthz";
+    String targetMethodType = util.getMethodType();
+    String healthcheck = util.serverHealth(targetURL, targetMethodType);
+
+    System.out.println("healthcheck :: " + healthcheck);
+
+    Response response = new Response();
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+  }
 }
