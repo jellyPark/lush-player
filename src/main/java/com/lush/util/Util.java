@@ -10,9 +10,14 @@ public class Util {
   @Autowired
   private HttpServletRequest request;
 
+  /**
+   * Method name : getMethodType
+   * Description : Gets the method type of RequestMapping.
+   *
+   * @return String
+   */
   public String getMethodType() {
     System.out.println("Method Type :: " + request.getRequestURI() + " :: " + request.getMethod());
-
     return request.getMethod();
   }
 
@@ -21,4 +26,5 @@ public class Util {
     System.out.println("Request URI :: " + request.getRequestURI());
     return request.getRequestURI();
   }
+
 }

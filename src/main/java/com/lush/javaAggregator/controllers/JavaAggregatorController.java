@@ -1,14 +1,15 @@
 package com.lush.javaAggregator.controllers;
 
+import com.lush.javaAggregator.enums.ExceptionType;
+import com.lush.javaAggregator.exceptions.BaseException;
+import com.lush.javaAggregator.modles.Response;
+import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,13 +18,31 @@ public class JavaAggregatorController {
   @Autowired
   private Util util;
 
-  @GetMapping("/findmethodtype")
+  /**
+   * Define Utils for get response headers.
+   */
+  @Autowired
+  private HttpUtil httpUtil;
+
+
+  @GetMapping(value = "/findmethodtype")
   public String findMethodType() {
     return util.getMethodType();
   }
 
-  @GetMapping("/sampleGetUri")
+  @GetMapping(value = "/sampleGetUri")
   public String sampleGetUri() {
     return util.getUri();
+  }
+
+  @GetMapping(value = "/validation/{id}")
+  public ResponseEntity<Object> validation(@PathVariable long id) throws Exception {
+
+    if (id < 1) {
+      throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
+    }
+
+    Response response = new Response();
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 }
