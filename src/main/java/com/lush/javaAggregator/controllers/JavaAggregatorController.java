@@ -1,5 +1,7 @@
 package com.lush.javaAggregator.controllers;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lush.javaAggregator.enums.ExceptionType;
 import com.lush.javaAggregator.exceptions.BaseException;
 import com.lush.javaAggregator.modles.Response;
@@ -18,6 +20,11 @@ public class JavaAggregatorController {
   @Autowired
   private Util util;
 
+
+  @Autowired
+  private ObjectMapper mapper;
+
+
   /**
    * Define Utils for get response headers.
    */
@@ -29,6 +36,16 @@ public class JavaAggregatorController {
   public String findMethodType() {
     return util.getMethodType();
   }
+
+
+//  @PostMapping(value = "/testPodcasts")
+//  public String createPodcast(@RequestBody @Valid PodcastReq podcastReq) throws Exception {
+//
+//    HashMap reqMap = mapper.convertValue(podcastReq, HashMap.class);
+//    System.out.println("requestParams  :    " + reqMap.toString());
+//    return reqMap.toString();
+//  }
+
 
   @GetMapping(value = "/sampleGetUri")
   public String sampleGetUri() {
@@ -55,4 +72,5 @@ public class JavaAggregatorController {
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
+
 }
