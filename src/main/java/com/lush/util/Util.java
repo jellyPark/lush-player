@@ -1,9 +1,16 @@
 package com.lush.util;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lush.javaAggregator.enums.ResponseStatusType;
+import com.lush.javaAggregator.exceptions.BaseException;
+import com.lush.javaAggregator.modles.Response;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +39,11 @@ public class Util {
     return request.getRequestURI();
   }
 
-  public String serverHealth(String targetURL, String methodType) {
-    URL url;
+  public Response serverHealth(String targetURL, String methodType) {
+
+    Response response = new Response();
     HttpsURLConnection connection = null;
+    URL url;
 
     try {
       // Create connection
@@ -42,6 +51,7 @@ public class Util {
       connection = (HttpsURLConnection) url.openConnection();
       connection.setRequestMethod(methodType);
       connection.setRequestProperty("Content-Type", "application/json");
+      connection.setRequestProperty("Accept", "application/json");
       connection.setConnectTimeout(10000);
       connection.setReadTimeout(5000);
 
@@ -49,28 +59,46 @@ public class Util {
       System.out.println("\nSending 'GET' request to URL : " + url);
       System.out.println("Response Code : " + responseCode);
 
-      Charset charset = Charset.forName("UTF-8");
-
       BufferedReader reader = new BufferedReader(
-          new InputStreamReader(connection.getInputStream(), charset));
+          new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
+
       String inputLine;
-      StringBuffer response = new StringBuffer();
+      StringBuffer stringBuffer = new StringBuffer();
       while ((inputLine = reader.readLine()) != null) {
-        response.append(inputLine);
+        stringBuffer.append(inputLine);
+      }
+
+      Gson gson = new Gson();
+      Type outputType = new TypeToken<Map<String, Object>>() {
+      }.getType();
+      Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
+
+      System.out.println("조회결과 : " + stringBuffer.toString());
+
+      if (responseCode == 200) {
+        response.setStatus(ResponseStatusType.OK);
+        Integer code = (int) Double.parseDouble(objectMap.get("code").toString());
+        response.setCode(code);
+        response.setMessage(objectMap.get("message").toString());
+        response.setData(objectMap.get("data"));
+      } else {
+        response.setStatus(ResponseStatusType.FAIL);
+        Integer code = (int) Double.parseDouble(objectMap.get("code").toString());
+        response.setCode(code);
+        response.setMessage(objectMap.get("message").toString());
+        response.setData(objectMap.get("data"));
       }
 
       reader.close();
 
-      System.out.println("조회결과 : " + response.toString());
-      return response.toString();
-
     } catch (Exception e) {
       e.printStackTrace();
-      return null;
+      throw new BaseException(e.getMessage());
     } finally {
       if (connection != null) {
         connection.disconnect();
       }
+      return response;
     }
   }
 

@@ -51,11 +51,8 @@ public class JavaAggregatorController {
 
     String targetURL = "https://" + targetService + "-staging.platformserviceaccount.com/healthz";
     String targetMethodType = util.getMethodType();
-    String healthcheck = util.serverHealth(targetURL, targetMethodType);
+    Response response = util.serverHealth(targetURL, targetMethodType);
 
-    System.out.println("healthcheck :: " + healthcheck);
-
-    Response response = new Response();
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 }
