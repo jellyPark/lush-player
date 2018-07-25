@@ -37,16 +37,6 @@ public class JavaAggregatorController {
     return util.getMethodType();
   }
 
-
-//  @PostMapping(value = "/testPodcasts")
-//  public String createPodcast(@RequestBody @Valid PodcastReq podcastReq) throws Exception {
-//
-//    HashMap reqMap = mapper.convertValue(podcastReq, HashMap.class);
-//    System.out.println("requestParams  :    " + reqMap.toString());
-//    return reqMap.toString();
-//  }
-
-
   @GetMapping(value = "/sampleGetUri")
   public String sampleGetUri() {
     return util.getUri();

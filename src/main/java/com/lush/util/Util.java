@@ -17,10 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class Util {
 
   @Autowired
@@ -33,13 +35,16 @@ public class Util {
    * @return String
    */
   public String getMethodType() {
-    System.out.println("Method Type :: " + request.getRequestURI() + " :: " + request.getMethod());
+    log.info("Method Type :: " + request.getRequestURI() + " :: " + request.getMethod());
+//    System.out.println("Method Type :: " + request.getRequestURI() + " :: " + request.getMethod());
     return request.getMethod();
   }
 
   public String getUri() {
-    System.out.println("Request URL :: " + request.getRequestURL());
-    System.out.println("Request URI :: " + request.getRequestURI());
+    log.info("Request URL :: " + request.getRequestURL());
+    log.info("Request URI :: " + request.getRequestURI());
+//    System.out.println("Request URL :: " + request.getRequestURL());
+//    System.out.println("Request URI :: " + request.getRequestURI());
     return request.getRequestURI();
   }
 
@@ -60,8 +65,10 @@ public class Util {
       connection.setReadTimeout(5000);
 
       int responseCode = connection.getResponseCode();
-      System.out.println("\nSending 'GET' request to URL : " + url);
-      System.out.println("Response Code : " + responseCode);
+      log.info("\nSending 'GET' request to URL : " + url);
+      log.info("Response Code : " + responseCode);
+//      System.out.println("\nSending 'GET' request to URL : " + url);
+//      System.out.println("Response Code : " + responseCode);
 
       BufferedReader reader = new BufferedReader(
           new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
@@ -77,7 +84,8 @@ public class Util {
       }.getType();
       Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
 
-      System.out.println("조회결과 : " + stringBuffer.toString());
+      log.info("조회결과 : " + stringBuffer.toString());
+//      System.out.println("조회결과 : " + stringBuffer.toString());
 
       if (responseCode == 200) {
         response.setStatus(ResponseStatusType.OK);
@@ -109,7 +117,8 @@ public class Util {
   public HashMap getParams(String params) throws Exception {
     HashMap reqMap = new HashMap();
     if (params.equals("")) {
-      System.out.println("requestParams is null");
+      log.info("requestParams is null");
+//      System.out.println("requestParams is null");
     } else {
       String methodType = request.getMethod();
       if (methodType.equals("POST") || methodType.equals("PUT")) {
