@@ -49,7 +49,7 @@ public class BaseException extends RuntimeException {
   /**
    * The default creator. (User Created)
    */
-  private BaseException(Integer code, String handlerMessage) {
+  public BaseException(Integer code, String handlerMessage) {
     this.status = ResponseStatusType.FAIL;
     this.code = code;
     this.message = handlerMessage;
