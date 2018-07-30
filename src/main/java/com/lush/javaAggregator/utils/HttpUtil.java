@@ -33,8 +33,7 @@ public class HttpUtil {
    *
    * @return ResponseEntity
    */
-  public ResponseEntity<Object> responseValidation(BindingResult result)
-      throws Exception {
+  public ResponseEntity<Object> responseValidation(BindingResult result) throws Exception {
     Response response =
         new Response(ResponseStatusType.FAIL,
             HttpStatus.UNPROCESSABLE_ENTITY.value(), result.getAllErrors().get(0)

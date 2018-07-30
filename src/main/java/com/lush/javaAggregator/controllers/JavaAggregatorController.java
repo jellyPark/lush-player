@@ -105,7 +105,6 @@ public class JavaAggregatorController {
   public ResponseEntity<Object> getTest(@PathVariable String targetService,
       @PathVariable String endpoint) {
 
-    log.info("getTest");
     String targetMethodType = util.getMethodType();
     Response response = util.callService(targetMethodType, "");
 
