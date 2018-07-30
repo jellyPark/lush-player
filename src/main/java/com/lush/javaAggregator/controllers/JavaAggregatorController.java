@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,15 +59,6 @@ public class JavaAggregatorController {
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
-//  @GetMapping(value = "/{targetService}/healthz")
-//  public ResponseEntity<Object> serverHealth(@PathVariable String targetService) {
-//
-//    String targetMethodType = util.getMethodType();
-//    Response response = util.serverHealthCheck(targetMethodType);
-//
-//    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-//  }
-
   @PostMapping(value = "/{targetService}")
   public ResponseEntity<Object> postTest(@PathVariable String targetService,
       @RequestBody Map<String, Object> param) throws Exception {
@@ -94,6 +86,17 @@ public class JavaAggregatorController {
       @PathVariable String endpoint) {
 
     log.info("getTest");
+    String targetMethodType = util.getMethodType();
+    Response response = util.callService(targetMethodType, "");
+
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+  }
+
+  @DeleteMapping(value = "/{targetService}/{endpoint}")
+  public ResponseEntity<Object> deleteTest(@PathVariable String targetService,
+      @PathVariable long endpoint) {
+
+    log.info("deleteTest");
     String targetMethodType = util.getMethodType();
     Response response = util.callService(targetMethodType, "");
 
