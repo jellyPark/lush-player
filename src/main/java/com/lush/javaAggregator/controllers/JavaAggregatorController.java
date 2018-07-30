@@ -7,7 +7,9 @@ import com.lush.javaAggregator.exceptions.BaseException;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,8 @@ public class JavaAggregatorController {
   @Autowired
   private ObjectMapper mapper;
 
+  @Autowired
+  private MessageSource messageSource;
 
   /**
    * Define Utils for get response headers.
@@ -69,6 +73,22 @@ public class JavaAggregatorController {
     String targetURL = "https://" + targetService + "-staging.platformserviceaccount.com/healthz";
     String targetMethodType = util.getMethodType();
     Response response = util.serverHealth(targetURL, targetMethodType);
+
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/test/message")
+  public ResponseEntity<Object> getMessage() {
+
+    String koMsg = messageSource.getMessage("hello.test", null, "test", Locale.KOREA);
+    String ukMsg = messageSource.getMessage("hello.test", null, "test", Locale.UK);
+    String engMsg = messageSource.getMessage("hello.test", null, "test", Locale.ENGLISH);
+
+    System.out.println("  KO MSG :  "  +    koMsg);
+    System.out.println("   UK MSG :  "  +    ukMsg);
+    System.out.println("  EN MSG :  "  +    engMsg);
+
+    Response response = new Response();
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
