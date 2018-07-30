@@ -62,6 +62,14 @@ public class JavaAggregatorController {
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
+//  @PostMapping(value = "/testPodcasts")
+//  public String createPodcast(@RequestBody @Valid PodcastReq podcastReq) throws Exception {
+//
+//    HashMap reqMap = mapper.convertValue(podcastReq, HashMap.class);
+//    System.out.println("requestParams  :    " + reqMap.toString());
+//    return reqMap.toString();
+//  }
+
 //  @GetMapping(value = "/{targetService}/healthz")
 //  public ResponseEntity<Object> serverHealth(@PathVariable String targetService) {
 //
@@ -112,7 +120,6 @@ public class JavaAggregatorController {
     String engMsg = messageSource.getMessage("hello.test", null, "test", Locale.ENGLISH);
 
     System.out.println("  KO MSG :  "  +    koMsg);
-    System.out.println("   UK MSG :  "  +    ukMsg);
     System.out.println("  EN MSG :  "  +    engMsg);
 
     Response response = new Response();
