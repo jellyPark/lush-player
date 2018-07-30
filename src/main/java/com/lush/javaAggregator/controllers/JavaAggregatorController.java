@@ -7,13 +7,13 @@ import com.lush.javaAggregator.exceptions.BaseException;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
-import java.util.Locale;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -105,7 +105,17 @@ public class JavaAggregatorController {
   public ResponseEntity<Object> getTest(@PathVariable String targetService,
       @PathVariable String endpoint) {
 
-    log.info("getTest");
+    String targetMethodType = util.getMethodType();
+    Response response = util.callService(targetMethodType, "");
+
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+  }
+
+  @DeleteMapping(value = "/{targetService}/{endpoint}")
+  public ResponseEntity<Object> deleteTest(@PathVariable String targetService,
+      @PathVariable long endpoint) {
+
+    log.info("deleteTest");
     String targetMethodType = util.getMethodType();
     Response response = util.callService(targetMethodType, "");
 
