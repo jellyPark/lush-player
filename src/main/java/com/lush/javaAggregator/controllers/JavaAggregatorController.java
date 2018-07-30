@@ -112,16 +112,16 @@ public class JavaAggregatorController {
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
-  @GetMapping(value = "/test/message")
-  public String getMessage() {
-
-    String koMsg = messageSource.getMessage("hello.test", null, "test", Locale.KOREA);
-    String engMsg = messageSource.getMessage("hello.test", null, "test", Locale.ENGLISH);
-
-    System.out.println("  KO MSG :  "  +    koMsg);
-    System.out.println("  EN MSG :  "  +    engMsg);
-
-    return "test";
-  }
+//  @GetMapping(value = "/test/message")
+//  public String getMessage() {
+//
+//    String koMsg = messageSource.getMessage("hello.test", null, "test", Locale.KOREA);
+//    String engMsg = messageSource.getMessage("hello.test", null, "test", Locale.ENGLISH);
+//
+//    log.info("  KO MSG :  "  +    koMsg);
+//    log.info("  EN MSG :  "  +    engMsg);
+//
+//    return "test";
+//  }
 
 }
