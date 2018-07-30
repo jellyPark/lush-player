@@ -113,7 +113,7 @@ public class JavaAggregatorController {
   }
 
   @GetMapping(value = "/test/message")
-  public ResponseEntity<Object> getMessage() {
+  public String getMessage() {
 
     String koMsg = messageSource.getMessage("hello.test", null, "test", Locale.KOREA);
     String engMsg = messageSource.getMessage("hello.test", null, "test", Locale.ENGLISH);
@@ -121,9 +121,7 @@ public class JavaAggregatorController {
     System.out.println("  KO MSG :  "  +    koMsg);
     System.out.println("  EN MSG :  "  +    engMsg);
 
-    Response response = new Response();
-
-    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+    return "test";
   }
 
 }
