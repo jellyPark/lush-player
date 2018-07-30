@@ -10,6 +10,7 @@ import com.lush.util.Util;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +31,8 @@ public class JavaAggregatorController {
   @Autowired
   private ObjectMapper mapper;
 
+  @Autowired
+  private MessageSource messageSource;
 
   /**
    * Define Utils for get response headers.
@@ -58,6 +61,23 @@ public class JavaAggregatorController {
     Response response = new Response();
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
+
+//  @PostMapping(value = "/testPodcasts")
+//  public String createPodcast(@RequestBody @Valid PodcastReq podcastReq) throws Exception {
+//
+//    HashMap reqMap = mapper.convertValue(podcastReq, HashMap.class);
+//    System.out.println("requestParams  :    " + reqMap.toString());
+//    return reqMap.toString();
+//  }
+
+//  @GetMapping(value = "/{targetService}/healthz")
+//  public ResponseEntity<Object> serverHealth(@PathVariable String targetService) {
+//
+//    String targetMethodType = util.getMethodType();
+//    Response response = util.serverHealthCheck(targetMethodType);
+//
+//    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+//  }
 
   @PostMapping(value = "/{targetService}")
   public ResponseEntity<Object> postTest(@PathVariable String targetService,
@@ -102,5 +122,17 @@ public class JavaAggregatorController {
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
+
+//  @GetMapping(value = "/test/message")
+//  public String getMessage() {
+//
+//    String koMsg = messageSource.getMessage("hello.test", null, "test", Locale.KOREA);
+//    String engMsg = messageSource.getMessage("hello.test", null, "test", Locale.ENGLISH);
+//
+//    log.info("  KO MSG :  "  +    koMsg);
+//    log.info("  EN MSG :  "  +    engMsg);
+//
+//    return "test";
+//  }
 
 }
