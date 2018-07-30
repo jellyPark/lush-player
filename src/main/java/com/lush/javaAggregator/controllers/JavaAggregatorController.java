@@ -116,7 +116,6 @@ public class JavaAggregatorController {
   public ResponseEntity<Object> getMessage() {
 
     String koMsg = messageSource.getMessage("hello.test", null, "test", Locale.KOREA);
-    String ukMsg = messageSource.getMessage("hello.test", null, "test", Locale.UK);
     String engMsg = messageSource.getMessage("hello.test", null, "test", Locale.ENGLISH);
 
     System.out.println("  KO MSG :  "  +    koMsg);
