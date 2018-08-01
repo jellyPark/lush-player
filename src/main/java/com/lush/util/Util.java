@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.lush.javaAggregator.enums.ExceptionType;
 import com.lush.javaAggregator.enums.ResponseStatusType;
 import com.lush.javaAggregator.exceptions.BaseException;
 import com.lush.javaAggregator.modles.Response;
@@ -300,16 +301,23 @@ public class Util {
     }
   }
 
-  public HashMap getParams(String params) throws Exception {
-    HashMap reqMap = new HashMap();
+  /**
+   * Method name : getParams.
+   * Description :
+   *
+   * @return Map<String, Object>
+   */
+  public Map<String, Object> getParams(Map<String, Object> params) throws Exception {
+    Map<String, Object> reqMap = new HashMap<String, Object>();
     if (params.equals("")) {
       log.info("requestParams is null");
     } else {
       String methodType = request.getMethod();
       if (methodType.equals("POST") || methodType.equals("PUT")) {
-        ObjectMapper mapper = new ObjectMapper();
+/*        ObjectMapper mapper = new ObjectMapper();
         reqMap = mapper.readValue(params, new TypeReference<HashMap>() {
-        });
+        });*/
+        reqMap.putAll(params);
       } else {
         Enumeration e = request.getParameterNames();
         while (e.hasMoreElements()) {
@@ -323,4 +331,20 @@ public class Util {
     }
     return reqMap;
   }
+
+  public boolean checkPageNum() throws Exception {
+    boolean check = true;
+    String methodType = request.getMethod();
+    System.out.println("  request.getParameter : " + request.getParameter("page"));
+    if(methodType.equals("GET")){
+       String pageNum = request.getParameter("page");
+       if(pageNum != null){
+         if(Integer.parseInt(pageNum) < 0){
+            check = false;
+         }
+       }
+    }
+    return check;
+  }
+
 }

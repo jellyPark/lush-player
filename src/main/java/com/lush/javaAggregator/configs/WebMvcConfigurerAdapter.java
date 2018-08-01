@@ -20,6 +20,7 @@ public class WebMvcConfigurerAdapter {
   @Value("${message.classpath}")
   private String classPath;
 
+
   @Bean
   public MessageSource messageSource() {
     ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();

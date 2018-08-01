@@ -58,6 +58,12 @@ public class JavaAggregatorController {
       throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
     }
 
+    if(util.checkPageNum()){
+    }else{
+      throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
+      //추후에 페이지관련 ExceptionType 추가...
+    }
+
     Response response = new Response();
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
