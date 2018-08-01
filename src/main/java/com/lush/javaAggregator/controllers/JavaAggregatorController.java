@@ -55,6 +55,8 @@ public class JavaAggregatorController {
   public ResponseEntity<Object> validation(@PathVariable long id) throws Exception {
 
     if (id < 1) {
+      /* Error Log Example */
+      log.info("Error  : "  + ExceptionType.INVALID_ID_VALUE.getMassage());
       throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
     }
 
@@ -67,7 +69,7 @@ public class JavaAggregatorController {
     Response response = new Response();
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
-
+//  Get RequestBody ..,
 //  @PostMapping(value = "/testPodcasts")
 //  public String createPodcast(@RequestBody @Valid PodcastReq podcastReq) throws Exception {
 //
@@ -88,20 +90,23 @@ public class JavaAggregatorController {
   @PostMapping(value = "/{targetService}")
   public ResponseEntity<Object> postTest(@PathVariable String targetService,
       @RequestBody Map<String, Object> param) throws Exception {
-
+    /* Service Log Example :  util.getMethodType  */
     String targetMethodType = util.getMethodType();
-
-    log.info("param : " + param);
-    StringBuffer stringParamBuffer = new StringBuffer();
+    /* Request Log Example */
+    log.info("RequestParams : " + param);
+     StringBuffer stringParamBuffer = new StringBuffer();
 
     for (String key : param.keySet()) {
-      log.info("key : " + param.get(key));
+      log.info("key : " + key + "/ value : " + param.get(key));
       stringParamBuffer.append(param.get(key));
     }
 
     String stringParam = stringParamBuffer.toString();
 
     Response response = util.callService(targetMethodType, stringParam);
+
+    /* Response Log Example */
+    log.info("Response :  " + response.toString());
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
 
