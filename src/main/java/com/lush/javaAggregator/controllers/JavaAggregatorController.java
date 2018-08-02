@@ -2,20 +2,15 @@ package com.lush.javaAggregator.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import com.lush.javaAggregator.enums.ExceptionType;
 import com.lush.javaAggregator.exceptions.BaseException;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
-import java.net.URI;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @Slf4j
@@ -61,7 +55,15 @@ public class JavaAggregatorController {
   public ResponseEntity<Object> validation(@PathVariable long id) throws Exception {
 
     if (id < 1) {
+      /* Error Log Example */
+      log.info("Error  : " + ExceptionType.INVALID_ID_VALUE.getMassage());
       throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
+    }
+
+    if (util.checkPageNum()) {
+    } else {
+      throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
+      //추후에 페이지관련 ExceptionType 추가...
     }
 
     Response response = new Response();
@@ -71,20 +73,23 @@ public class JavaAggregatorController {
   @PostMapping(value = "/{targetService}")
   public ResponseEntity<Object> postTest(@PathVariable String targetService,
       @RequestBody Map<String, Object> param) throws Exception {
-
+    /* Service Log Example :  util.getMethodType  */
     String targetMethodType = util.getMethodType();
-
-    log.info("param : " + param);
+    /* Request Log Example */
+    log.info("RequestParams : " + param);
     StringBuffer stringParamBuffer = new StringBuffer();
 
     for (String key : param.keySet()) {
-      log.info("key : " + param.get(key));
+      log.info("key : " + key + "/ value : " + param.get(key));
       stringParamBuffer.append(param.get(key));
     }
 
     String stringParam = stringParamBuffer.toString();
 
     Response response = util.callService(targetMethodType, stringParam);
+
+    /* Response Log Example */
+    log.info("Response :  " + response.toString());
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
 

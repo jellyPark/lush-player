@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:int="http://www.springframework.org/schema/integration"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/integration
+                        http://www.springframework.org/schema/integration/spring-integration-2.1.xsd">
+
+  <int:channel id="inputChannel"/>
+
+  <int:aggregator id="myAggregator"
+    auto-startup="true"
+    input-channel="inputChannel"
+    output-channel="outputChannel"
+    discard-channel="throwAwayChannel"
+    message-store="persistentMessageStore"
+    order="1"
+    send-partial-result-on-expiry ="false"
+    send-timeout="1000"
+    correlation-strategy="correlationStrategyBean"
+    correlation-strategy-method="correlate"
+    ref="aggregatorBean"
+    method="aggregate"
+    release-strategy="releaseStrategyBean"
+    release-strategy-method="release"/>
+
+  <int:channel id="outputChannel"/>
+  <int:channel id="throwAwayChannel"/>
+  <bean id="persistentMessageStore"
+    class="org.springframework.integration.jdbc.JdbcMessageStore">
+    <constructor-arg ref="dataSource"/>
+  </bean>
+
+  <bean id="aggregatorBean" class="sample.PojoAggregator"/>
+  <bean id="releaseStrategyBean" class="sample.PojoReleaseStrategy"/>
+  <bean id="correlationStrategyBean" class="sample.PojoCorrelationStrategy"/>
+
+</beans>

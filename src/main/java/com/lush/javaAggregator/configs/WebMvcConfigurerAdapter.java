@@ -10,16 +10,22 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 @EnableWebMvc
 @Slf4j
 public class WebMvcConfigurerAdapter {
+
+  @Value("${message.classpath}")
+  private String classPath;
+
+
   @Bean
   public MessageSource messageSource() {
     ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
     //WEB-INF 밑에 해당 폴더에서 properties를 찾는다.
-    messageSource.setBasename("messages/messages");
+    messageSource.setBasename(classPath);
     messageSource.setDefaultEncoding("UTF-8");
     return messageSource;
   }

@@ -13,7 +13,8 @@ bootDistTar.archiveName = "service.tar"
 
 buildscript {
     ext {
-        springBootVersion = '2.0.0.RELEASE'
+        springBootVersion = '2.0.4.RELEASE'
+        springIntegrationVersion = '5.0.7.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -41,8 +42,12 @@ dependencies {
 
     compile 'org.apache.httpcomponents:httpclient:4.5'
 
-//    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.3.RELEASE'
-//    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
+    compile group: 'org.springframework.integration', name: 'spring-integration-xml', version: "${springIntegrationVersion}"
+    compile group: 'org.springframework.integration', name: 'spring-integration-jmx', version: "${springIntegrationVersion}"
+    compile group: 'org.springframework.integration', name: 'spring-integration-stream', version: "${springIntegrationVersion}"
+    compile group: 'org.springframework.integration', name: 'spring-integration-http', version: "${springIntegrationVersion}"
+    compile group: 'org.springframework.integration', name: 'spring-integration-groovy'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testCompile group: 'org.springframework.integration', name: 'spring-integration-test', version: "${springIntegrationVersion}"
 }
