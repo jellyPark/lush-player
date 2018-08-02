@@ -8,7 +8,8 @@ import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Slf4j
 public class JavaAggregatorController {
+
+  static final Logger logger = LoggerFactory.getLogger(JavaAggregatorController.class);
 
   @Autowired
   private Util util;
@@ -56,7 +58,7 @@ public class JavaAggregatorController {
 
     if (id < 1) {
       /* Error Log Example */
-      log.info("Error  : " + ExceptionType.INVALID_ID_VALUE.getMassage());
+      logger.info("Error  : " + ExceptionType.INVALID_ID_VALUE.getMassage());
       throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
     }
 
@@ -76,11 +78,11 @@ public class JavaAggregatorController {
     /* Service Log Example :  util.getMethodType  */
     String targetMethodType = util.getMethodType();
     /* Request Log Example */
-    log.info("RequestParams : " + param);
+    logger.info("RequestParams : " + param);
     StringBuffer stringParamBuffer = new StringBuffer();
 
     for (String key : param.keySet()) {
-      log.info("key : " + key + "/ value : " + param.get(key));
+      logger.info("key : " + key + "/ value : " + param.get(key));
       stringParamBuffer.append(param.get(key));
     }
 
@@ -89,7 +91,7 @@ public class JavaAggregatorController {
     Response response = util.callService(targetMethodType, stringParam);
 
     /* Response Log Example */
-    log.info("Response :  " + response.toString());
+    logger.info("Response :  " + response.toString());
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
 
@@ -109,7 +111,7 @@ public class JavaAggregatorController {
   public ResponseEntity<Object> deleteTest(@PathVariable String targetService,
       @PathVariable long endpoint) {
 
-    log.info("deleteTest");
+    logger.info("deleteTest");
     String targetMethodType = util.getMethodType();
     Response response = util.callService(targetMethodType, "");
 
@@ -119,7 +121,7 @@ public class JavaAggregatorController {
   @GetMapping("/login")
   public ResponseEntity<Object> signin() {
 
-    log.info("login");
+    logger.info("login");
     String targetMethodType = util.getMethodType();
     Response response = util.callService("POST", "");
 

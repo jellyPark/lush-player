@@ -18,18 +18,20 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
 public class Util {
+
+  static final Logger logger = LoggerFactory.getLogger(Util.class);
 
   @Autowired
   private HttpServletRequest request;
@@ -56,7 +58,7 @@ public class Util {
    * @return String
    */
   public String getMethodType() {
-    log.info("Method Type :: " + request.getRequestURI() + " :: " + request.getMethod());
+    logger.info("Method Type :: " + request.getRequestURI() + " :: " + request.getMethod());
     return request.getMethod();
   }
 
@@ -153,7 +155,7 @@ public class Util {
 
       responseCode = new Integer(connection.getResponseCode());
       errorMessage = connection.getResponseMessage();
-      log.info("Sending 'GET' request to URL : " + url);
+      logger.info("Sending 'GET' request to URL : " + url);
 
       // Set the result values.
       BufferedReader reader = new BufferedReader(
@@ -170,7 +172,7 @@ public class Util {
       }.getType();
       Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
 
-      log.info("Sending 'GET' response : " + stringBuffer.toString());
+      logger.info("Sending 'GET' response : " + stringBuffer.toString());
 
       reader.close();
       return objectMap;
@@ -209,7 +211,7 @@ public class Util {
 
       responseCode = new Integer(connection.getResponseCode());
       errorMessage = connection.getResponseMessage();
-      log.info("\nSending 'DELETE' request to URL : " + url);
+      logger.info("\nSending 'DELETE' request to URL : " + url);
 
       // Set the result values.
       BufferedReader reader = new BufferedReader(
@@ -226,7 +228,7 @@ public class Util {
       }.getType();
       Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
 
-      log.info("Sending 'DELETE' response : " + stringBuffer.toString());
+      logger.info("Sending 'DELETE' response : " + stringBuffer.toString());
 
       reader.close();
       return objectMap;
@@ -296,7 +298,7 @@ public class Util {
       connection.setDoInput(true);
       connection.connect(); //connect
 
-      log.info("connection :: " + connection);
+      logger.info("connection :: " + connection);
 
       JsonObject parameter = new JsonObject();
       parameter.addProperty("email", "webdev@lush.co.uk");
@@ -308,14 +310,14 @@ public class Util {
 
       int responseCode = connection.getResponseCode();
 
-      log.info("\nSending 'POST' request to URL : " + url);
+      logger.info("\nSending 'POST' request to URL : " + url);
       System.out.println("Post parameters : " + parameter.toString());
-      log.info("Response Code : " + responseCode);
-      log.info("Response Message : " + connection.getResponseMessage());
+      logger.info("Response Code : " + responseCode);
+      logger.info("Response Message : " + connection.getResponseMessage());
 
-      log.info("connection.getInputStream() :: " + connection.getInputStream());
+      logger.info("connection.getInputStream() :: " + connection.getInputStream());
 
-      log.info("=================================================");
+      logger.info("=================================================");
 
       if (responseCode == HttpURLConnection.HTTP_OK) {
         // Set the result values.
@@ -332,12 +334,12 @@ public class Util {
         }.getType();
         Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
 
-        log.info("결과 : " + stringBuffer.toString());
+        logger.info("결과 : " + stringBuffer.toString());
 
         reader.close();
         return objectMap;
       } else {
-        log.info("fail");
+        logger.info("fail");
         return null;
       }
 
@@ -349,7 +351,7 @@ public class Util {
     } finally {
 
       if (connection != null) {
-        log.info("disconnection");
+        logger.info("disconnection");
         connection.disconnect();
       }
     }
@@ -365,7 +367,7 @@ public class Util {
     Map<String, Object> reqMap = new HashMap<String, Object>();
 
     if (params.equals("")) {
-      log.info("requestParams is null");
+      logger.info("requestParams is null");
     } else {
       String methodType = request.getMethod();
       if (methodType.equals("POST") || methodType.equals("PUT")) {
