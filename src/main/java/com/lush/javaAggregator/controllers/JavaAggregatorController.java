@@ -2,15 +2,20 @@ package com.lush.javaAggregator.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import com.lush.javaAggregator.enums.ExceptionType;
 import com.lush.javaAggregator.exceptions.BaseException;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
+import java.net.URI;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @Slf4j
@@ -61,23 +67,6 @@ public class JavaAggregatorController {
     Response response = new Response();
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
-
-//  @PostMapping(value = "/testPodcasts")
-//  public String createPodcast(@RequestBody @Valid PodcastReq podcastReq) throws Exception {
-//
-//    HashMap reqMap = mapper.convertValue(podcastReq, HashMap.class);
-//    System.out.println("requestParams  :    " + reqMap.toString());
-//    return reqMap.toString();
-//  }
-
-//  @GetMapping(value = "/{targetService}/healthz")
-//  public ResponseEntity<Object> serverHealth(@PathVariable String targetService) {
-//
-//    String targetMethodType = util.getMethodType();
-//    Response response = util.serverHealthCheck(targetMethodType);
-//
-//    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-//  }
 
   @PostMapping(value = "/{targetService}")
   public ResponseEntity<Object> postTest(@PathVariable String targetService,
@@ -122,16 +111,14 @@ public class JavaAggregatorController {
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
-//  @GetMapping(value = "/test/message")
-//  public String getMessage() {
-//
-//    String koMsg = messageSource.getMessage("hello.test", null, "test", Locale.KOREA);
-//    String engMsg = messageSource.getMessage("hello.test", null, "test", Locale.ENGLISH);
-//
-//    log.info("  KO MSG :  "  +    koMsg);
-//    log.info("  EN MSG :  "  +    engMsg);
-//
-//    return "test";
-//  }
+  @GetMapping("/login")
+  public ResponseEntity<Object> signin() {
+
+    log.info("login");
+    String targetMethodType = util.getMethodType();
+    Response response = util.callService("POST", "");
+
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+  }
 
 }

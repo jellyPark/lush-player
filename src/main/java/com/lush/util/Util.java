@@ -3,14 +3,16 @@ package com.lush.util;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.lush.javaAggregator.enums.ResponseStatusType;
 import com.lush.javaAggregator.exceptions.BaseException;
 import com.lush.javaAggregator.modles.Response;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
@@ -19,6 +21,10 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -72,10 +78,16 @@ public class Util {
    *
    * @return String
    */
-  private String setServiceURL() {
+  private String setServiceURL(String type) {
 
-    return "https://podcast-staging.platformserviceaccount.com/podcasts"; // Get Test URL
-//    return "https://" + gateway_uri + "-" + environment + "." + domain + "/service" + getUri();
+    if ("test".equals(type)) {
+      return "https://podcast-staging.platformserviceaccount.com/podcasts"; // Get Test URL
+    } else if ("login".equals(type)) {
+      return "https://" + gateway_uri + "-" + environment + "." + domain + getUri();
+    } else {
+      return "https://" + gateway_uri + "-" + environment + "." + domain + "/service" + getUri();
+    }
+
   }
 
   public Response callService(String methodType, String param) {
@@ -121,7 +133,7 @@ public class Util {
    * Description : It transmits with "GET" method.
    * security 추가 작업 해야함.(권한문제)
    *
-   * @return Map<String ,Object>
+   * @return Map
    */
   private Map<String, Object> sendGetHttps() {
 
@@ -133,7 +145,7 @@ public class Util {
     try {
 
       // Create connection.
-      String targetURL = setServiceURL();
+      String targetURL = setServiceURL("");
       url = new URL(targetURL);
       connection = (HttpsURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
@@ -168,7 +180,8 @@ public class Util {
     } catch (Exception e) {
 
       e.printStackTrace();
-      throw new BaseException(responseCode, errorMessage.length() > 0 ? errorMessage : e.getMessage());
+      throw new BaseException(responseCode,
+          errorMessage.length() > 0 ? errorMessage : e.getMessage());
 
     } finally {
       if (connection != null) {
@@ -188,7 +201,7 @@ public class Util {
     try {
 
       // Create connection.
-      String targetURL = setServiceURL();
+      String targetURL = setServiceURL("");
       url = new URL(targetURL);
       connection = (HttpsURLConnection) url.openConnection();
       connection.setRequestMethod("DELETE");
@@ -215,7 +228,7 @@ public class Util {
       }.getType();
       Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
 
-      log.info("Sending 'GET' response : " + stringBuffer.toString());
+      log.info("Sending 'DELETE' response : " + stringBuffer.toString());
 
       reader.close();
       return objectMap;
@@ -236,6 +249,33 @@ public class Util {
 
   }
 
+  public void test() throws Exception {
+    HttpClient client = new DefaultHttpClient();
+    HttpPost requPost = new HttpPost(
+        "https://api-gateway-staging.platformserviceaccount.com/login");
+    HttpResponse response = client.execute(requPost);
+    int code = response.getStatusLine().getStatusCode();
+
+    try (BufferedReader br = new BufferedReader(
+        new InputStreamReader((response.getEntity().getContent())))) {
+      // Read in all of the post results into a String.
+      String output = "";
+      Boolean keepGoing = true;
+      while (keepGoing) {
+        String currentLine = br.readLine();
+        if (currentLine == null) {
+          keepGoing = false;
+        } else {
+          output += currentLine;
+        }
+      }
+      System.out.println("Response-->" + output);
+    } catch (Exception e) {
+      System.out.println("Exception" + e);
+
+    }
+  }
+
   public Map<String, Object> sendPostHttps(String param) {
 
     HttpsURLConnection connection = null;
@@ -244,48 +284,64 @@ public class Util {
     try {
 
       // Create connection.
-      String targetURL = setServiceURL();
+      String targetURL = setServiceURL("login");
       url = new URL(targetURL);
       connection = (HttpsURLConnection) url.openConnection();
 
       // Add request header.
       connection.setRequestMethod("POST");
       connection.setRequestProperty("Content-Type", "application/json");
-//      connection.setRequestProperty("Accept", "application/json");
+//      connection.setRequestProperty("Authorization", "Bearer "+ );
       connection.setConnectTimeout(10000);
       connection.setReadTimeout(5000);
-
-      // Send post request
       connection.setDoOutput(true);              //항상 갱신된내용을 가져옴.
-      DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-      wr.writeBytes(param);
-      wr.flush();
-      wr.close();
+      connection.setDoInput(true);
+      connection.connect(); //connect
+
+      log.info("connection :: " + connection);
+
+      JsonObject parameter = new JsonObject();
+      parameter.addProperty("email", "webdev@lush.co.uk");
+      parameter.addProperty("password", "{{password}}");
+
+      OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+      out.write(parameter.toString());
+      out.close();
 
       int responseCode = connection.getResponseCode();
+
       log.info("\nSending 'POST' request to URL : " + url);
-      System.out.println("Post parameters : " + param);
+      System.out.println("Post parameters : " + parameter.toString());
       log.info("Response Code : " + responseCode);
+      log.info("Response Message : " + connection.getResponseMessage());
 
-      // Set the result values.
-      BufferedReader reader = new BufferedReader(
-          new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
+      log.info("connection.getInputStream() :: " + connection.getInputStream());
 
-      String inputLine;
-      StringBuffer stringBuffer = new StringBuffer();
-      while ((inputLine = reader.readLine()) != null) {
-        stringBuffer.append(inputLine);
+      log.info("=================================================");
+
+      if (responseCode == HttpURLConnection.HTTP_OK) {
+        // Set the result values.
+        BufferedReader reader = new BufferedReader(
+            new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
+
+        String inputLine;
+        StringBuffer stringBuffer = new StringBuffer();
+        while ((inputLine = reader.readLine()) != null) {
+          stringBuffer.append(inputLine);
+        }
+        Gson gson = new Gson();
+        Type outputType = new TypeToken<Map<String, Object>>() {
+        }.getType();
+        Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
+
+        log.info("결과 : " + stringBuffer.toString());
+
+        reader.close();
+        return objectMap;
+      } else {
+        log.info("fail");
+        return null;
       }
-
-      Gson gson = new Gson();
-      Type outputType = new TypeToken<Map<String, Object>>() {
-      }.getType();
-      Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
-
-      log.info("결과 : " + stringBuffer.toString());
-
-      reader.close();
-      return objectMap;
 
     } catch (Exception e) {
 
@@ -295,10 +351,12 @@ public class Util {
     } finally {
 
       if (connection != null) {
+        log.info("disconnection");
         connection.disconnect();
       }
     }
   }
+
 
   public HashMap getParams(String params) throws Exception {
     HashMap reqMap = new HashMap();
