@@ -24,7 +24,7 @@ import org.springframework.messaging.PollableChannel;
 @Configuration
 @IntegrationComponentScan
 @EnableIntegration
-public class g {
+public class IntegrationConfig {
 
   @Bean
   public PollableChannel bridgeFromInput() {
