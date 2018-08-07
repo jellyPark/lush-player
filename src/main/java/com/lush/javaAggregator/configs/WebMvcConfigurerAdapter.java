@@ -1,7 +1,7 @@
 package com.lush.javaAggregator.configs;
 
 import java.util.Locale;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,11 +10,9 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 @EnableWebMvc
-@Slf4j
 public class WebMvcConfigurerAdapter {
 
   @Value("${message.classpath}")
@@ -31,17 +29,17 @@ public class WebMvcConfigurerAdapter {
   }
 
   @Bean
-  public LocaleChangeInterceptor localeChangeInterceptor(){
-    LocaleChangeInterceptor localeChangeInterceptor=new LocaleChangeInterceptor();
+  public LocaleChangeInterceptor localeChangeInterceptor() {
+    LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
     //request로 넘어오는 language parameter를 받아서 locale로 설정 한다.
     localeChangeInterceptor.setParamName("language");
     return localeChangeInterceptor;
   }
 
   @Bean(name = "localeResolver")
-  public LocaleResolver sessionLocaleResolver(){
+  public LocaleResolver sessionLocaleResolver() {
     //세션 기준으로 로케일을 설정 한다.
-    SessionLocaleResolver localeResolver=new SessionLocaleResolver();
+    SessionLocaleResolver localeResolver = new SessionLocaleResolver();
 
     //최초 기본 로케일을 강제로 설정이 가능 하다.
     localeResolver.setDefaultLocale(new Locale("ko_KR"));
