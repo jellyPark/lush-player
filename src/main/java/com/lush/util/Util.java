@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
@@ -397,10 +398,25 @@ public class Util {
 
   public String getTokenKey(Map<String, Object> parameter) {
 
-    for (Map.Entry<String, Object> entry : parameter.entrySet()) {
-      String key = entry.getKey();
+    if (parameter.containsKey("data")) {
+      Map<String, Object> data = (Map<String, Object>) parameter.get("data");
 
-      logger.info("find Key :: " + key);
+      if (data.containsKey("consumer")) {
+        Map<String, Object> consumer = (Map<String, Object>) data.get("consumer");
+
+        if (consumer.containsKey("tokens")) {
+
+          Map<String, List> tokens = (Map<String, List>) data.get("tokens");
+          logger.info("tokens Type : " + tokens);
+
+//          if (tokens.containsKey("value")) {
+//            String value = tokens.get("value").toString();
+//            logger.info("value : " + value);
+//          }
+        }
+
+      }
+
     }
 
     return "test";
