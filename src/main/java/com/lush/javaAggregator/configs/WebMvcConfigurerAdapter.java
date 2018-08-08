@@ -36,14 +36,14 @@ public class WebMvcConfigurerAdapter {
     return localeChangeInterceptor;
   }
 
-  @Bean(name = "localeResolver")
-  public LocaleResolver sessionLocaleResolver() {
-    //세션 기준으로 로케일을 설정 한다.
-    SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-
-    //최초 기본 로케일을 강제로 설정이 가능 하다.
-    localeResolver.setDefaultLocale(new Locale("ko_KR"));
-
-    return localeResolver;
-  }
+//  @Bean(name = "localeResolver")
+//  public LocaleResolver sessionLocaleResolver() {
+//    //세션 기준으로 로케일을 설정 한다.
+//    SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+//
+//    //최초 기본 로케일을 강제로 설정이 가능 하다.
+//    localeResolver.setDefaultLocale(new Locale("ko_KR"));
+//
+//    return localeResolver;
+//  }
 }

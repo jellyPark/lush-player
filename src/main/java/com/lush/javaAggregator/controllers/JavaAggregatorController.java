@@ -43,11 +43,6 @@ public class JavaAggregatorController {
   private HttpUtil httpUtil;
 
 
-  @GetMapping(value = "/findmethodtype")
-  public String findMethodType() {
-    return util.getMethodType();
-  }
-
   @GetMapping(value = "/sampleGetUri")
   public String sampleGetUri() {
     return util.getUri();
@@ -72,37 +67,39 @@ public class JavaAggregatorController {
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
-  @PostMapping(value = "/{targetService}")
-  public ResponseEntity<Object> postTest(@PathVariable String targetService,
-      @RequestBody Map<String, Object> param) throws Exception {
-    /* Service Log Example :  util.getMethodType  */
-    String targetMethodType = util.getMethodType();
-    /* Request Log Example */
-    logger.info("RequestParams : " + param);
-    StringBuffer stringParamBuffer = new StringBuffer();
-
-    for (String key : param.keySet()) {
-      logger.info("key : " + key + "/ value : " + param.get(key));
-      stringParamBuffer.append(param.get(key));
-    }
-
-    String stringParam = stringParamBuffer.toString();
-
-    Response response = util.callService(targetMethodType, stringParam);
-
-    /* Response Log Example */
-    logger.info("Response :  " + response.toString());
-
-    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-
-  }
+//  @PostMapping(value = "/{targetService}")
+//  public ResponseEntity<Object> postTest(@PathVariable String targetService,
+//      @RequestBody Map<String, Object> param) throws Exception {
+//
+//    logger.info("=============== " + targetService + "==================");
+//    /* Service Log Example :  util.getMethodType  */
+//    String targetMethodType = util.getMethodType();
+//    /* Request Log Example */
+//    logger.info("RequestParams : " + param);
+//    StringBuffer stringParamBuffer = new StringBuffer();
+//
+//    for (String key : param.keySet()) {
+//      logger.info("key : " + key + "/ value : " + param.get(key));
+//      stringParamBuffer.append(param.get(key));
+//    }
+//
+//    String stringParam = stringParamBuffer.toString();
+//
+//    Response response = util.callService(targetMethodType, stringParam);
+//
+//    /* Response Log Example */
+//    logger.info("Response :  " + response.toString());
+//
+//    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+//
+//  }
 
   @GetMapping(value = "/{targetService}/{endpoint}")
   public ResponseEntity<Object> getTest(@PathVariable String targetService,
       @PathVariable String endpoint) {
 
     String targetMethodType = util.getMethodType();
-    Response response = util.callService(targetMethodType, "");
+    Response response = util.callService(targetMethodType, null);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
@@ -113,17 +110,16 @@ public class JavaAggregatorController {
 
     logger.info("deleteTest");
     String targetMethodType = util.getMethodType();
-    Response response = util.callService(targetMethodType, "");
+    Response response = util.callService(targetMethodType, null);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
-  @GetMapping("/login")
-  public ResponseEntity<Object> signin() {
+  @PostMapping(value = "/login")
+  public ResponseEntity<Object> signin(@RequestBody Map<String, Object> param) {
 
-    logger.info("login");
     String targetMethodType = util.getMethodType();
-    Response response = util.callService("POST", "");
+    Response response = util.callService(targetMethodType, param);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }

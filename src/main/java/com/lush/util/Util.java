@@ -15,13 +15,10 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +55,6 @@ public class Util {
    * @return String
    */
   public String getMethodType() {
-    logger.info("Method Type :: " + request.getRequestURI() + " :: " + request.getMethod());
     return request.getMethod();
   }
 
@@ -78,11 +74,13 @@ public class Util {
    *
    * @return String
    */
-  private String setServiceURL(String type) {
+  private String setServiceURL() {
 
-    if ("test".equals(type)) {
+    String type = getUri();
+
+    if ("/test".equals(type)) {
       return "https://podcast-staging.platformserviceaccount.com/podcasts"; // Get Test URL
-    } else if ("login".equals(type)) {
+    } else if ("/login".equals(type)) {
       return "https://" + gateway_uri + "-" + environment + "." + domain + getUri();
     } else {
       return "https://" + gateway_uri + "-" + environment + "." + domain + "/service" + getUri();
@@ -90,7 +88,7 @@ public class Util {
 
   }
 
-  public Response callService(String methodType, String param) {
+  public Response callService(String methodType, Map<String, Object> param) {
 
     Map<String, Object> resultMap = null;
     Response response = new Response();
@@ -104,7 +102,7 @@ public class Util {
     } else if ("PATCH".equals(methodType)) {
 
     } else if ("DELETE".equals(methodType)) {
-      resultMap = sendDeleteHttps(Long.parseLong(param));
+      resultMap = sendDeleteHttps(param);
     }
 
     Integer code = (int) Double.parseDouble(resultMap.get("code").toString());
@@ -145,7 +143,7 @@ public class Util {
     try {
 
       // Create connection.
-      String targetURL = setServiceURL("");
+      String targetURL = setServiceURL();
       url = new URL(targetURL);
       connection = (HttpsURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
@@ -191,7 +189,7 @@ public class Util {
 
   }
 
-  private Map<String, Object> sendDeleteHttps(long id) {
+  private Map<String, Object> sendDeleteHttps(Map<String, Object> param) {
 
     HttpsURLConnection connection = null;
     URL url;
@@ -201,7 +199,7 @@ public class Util {
     try {
 
       // Create connection.
-      String targetURL = setServiceURL("");
+      String targetURL = setServiceURL();
       url = new URL(targetURL);
       connection = (HttpsURLConnection) url.openConnection();
       connection.setRequestMethod("DELETE");
@@ -249,34 +247,7 @@ public class Util {
 
   }
 
-  public void test() throws Exception {
-    HttpClient client = new DefaultHttpClient();
-    HttpPost requPost = new HttpPost(
-        "https://api-gateway-staging.platformserviceaccount.com/login");
-    HttpResponse response = client.execute(requPost);
-    int code = response.getStatusLine().getStatusCode();
-
-    try (BufferedReader br = new BufferedReader(
-        new InputStreamReader((response.getEntity().getContent())))) {
-      // Read in all of the post results into a String.
-      String output = "";
-      Boolean keepGoing = true;
-      while (keepGoing) {
-        String currentLine = br.readLine();
-        if (currentLine == null) {
-          keepGoing = false;
-        } else {
-          output += currentLine;
-        }
-      }
-      System.out.println("Response-->" + output);
-    } catch (Exception e) {
-      System.out.println("Exception" + e);
-
-    }
-  }
-
-  public Map<String, Object> sendPostHttps(String param) {
+  public Map<String, Object> sendPostHttps(Map<String, Object> parameter) {
 
     HttpsURLConnection connection = null;
     URL url;
@@ -284,13 +255,16 @@ public class Util {
     try {
 
       // Create connection.
-      String targetURL = setServiceURL("login");
+      String targetURL = setServiceURL();
       url = new URL(targetURL);
       connection = (HttpsURLConnection) url.openConnection();
 
       // Add request header.
       connection.setRequestMethod("POST");
       connection.setRequestProperty("Content-Type", "application/json");
+//      type 이 /login이 아닌경우(일반 서비스 호출의 경우)
+//      Authorization 에 token을 담아 보내는 작업이 필요함
+//      String type = getUri();
 //      connection.setRequestProperty("Authorization", "Bearer "+ );
       connection.setConnectTimeout(10000);
       connection.setReadTimeout(5000);
@@ -298,28 +272,20 @@ public class Util {
       connection.setDoInput(true);
       connection.connect(); //connect
 
-      logger.info("connection :: " + connection);
+      // Map<String, Object> to JsonObject
+      JsonObject jsonParmeter = bindingJson(parameter);
 
-      JsonObject parameter = new JsonObject();
-      parameter.addProperty("email", "webdev@lush.co.uk");
-      parameter.addProperty("password", "{{password}}");
-
+      // Send Parameter
       OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-      out.write(parameter.toString());
+      out.write(jsonParmeter.toString());
       out.close();
 
       int responseCode = connection.getResponseCode();
 
       logger.info("\nSending 'POST' request to URL : " + url);
-      System.out.println("Post parameters : " + parameter.toString());
-      logger.info("Response Code : " + responseCode);
-      logger.info("Response Message : " + connection.getResponseMessage());
-
-      logger.info("connection.getInputStream() :: " + connection.getInputStream());
-
-      logger.info("=================================================");
 
       if (responseCode == HttpURLConnection.HTTP_OK) {
+
         // Set the result values.
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
@@ -334,12 +300,16 @@ public class Util {
         }.getType();
         Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
 
-        logger.info("결과 : " + stringBuffer.toString());
+        String key = getTokenKey(objectMap);
+        logger.info("result : " + stringBuffer.toString());
 
         reader.close();
         return objectMap;
+
       } else {
         logger.info("fail");
+        logger.info("Response Code : " + responseCode);
+        logger.info("Response Message : " + connection.getResponseMessage());
         return null;
       }
 
@@ -403,5 +373,54 @@ public class Util {
     }
     return check;
   }
+
+  /**
+   * Method name : bindingJson.
+   * Description : Map<String, Object> to JsonObject.
+   *
+   * @param parameter
+   * @return JsonObject
+   */
+  public JsonObject bindingJson(Map<String, Object> parameter) {
+
+    logger.info("RequestParams : " + parameter);
+
+    JsonObject jsonParameter = new JsonObject();
+
+    for (Map.Entry<String, Object> entry : parameter.entrySet()) {
+      String key = entry.getKey();
+      Object value = entry.getValue();
+      jsonParameter.addProperty(key, value.toString());
+    }
+
+    return jsonParameter;
+  }
+
+  public String getTokenKey(Map<String, Object> parameter) {
+
+    if (parameter.containsKey("data")) {
+      Map<String, Object> data = (Map<String, Object>) parameter.get("data");
+
+      if (data.containsKey("consumer")) {
+        Map<String, Object> consumer = (Map<String, Object>) data.get("consumer");
+
+        if (consumer.containsKey("tokens")) {
+
+          Map<String, List> tokens = (Map<String, List>) data.get("tokens");
+          logger.info("tokens Type : " + tokens);
+
+//          if (tokens.containsKey("value")) {
+//            String value = tokens.get("value").toString();
+//            logger.info("value : " + value);
+//          }
+        }
+
+      }
+
+    }
+
+    return "test";
+  }
+
 
 }
