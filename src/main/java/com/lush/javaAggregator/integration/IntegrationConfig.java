@@ -92,16 +92,16 @@ public class IntegrationConfig {
    *
    * @return
    */
-  @Bean
-  @ServiceActivator(inputChannel = "httpChannel", outputChannel = "outputChannel")
-  public MessageHandler httpHandler() {
-    System.out.println("Excute :::: httpHandler()");
-    HttpRequestExecutingMessageHandler handler = new HttpRequestExecutingMessageHandler(
-        "http://foo/service");
-    handler.setExpectedResponseType(String.class);
-    handler.setOutputChannelName("outputChannel");
-    return handler;
-  }
+//  @Bean
+//  @ServiceActivator(inputChannel = "httpChannel", outputChannel = "outputChannel")
+//  public MessageHandler httpHandler() {
+//    System.out.println("Excute :::: httpHandler()");
+//    HttpRequestExecutingMessageHandler handler = new HttpRequestExecutingMessageHandler(
+//        "http://foo/service");
+//    handler.setExpectedResponseType(String.class);
+//    handler.setOutputChannelName("outputChannel");
+//    return handler;
+//  }
 
   /**
    * Method name : loggingHandler.
