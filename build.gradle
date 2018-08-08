@@ -46,6 +46,7 @@ dependencies {
     compile group: 'org.springframework.integration', name: 'spring-integration-jmx', version: "${springIntegrationVersion}"
     compile group: 'org.springframework.integration', name: 'spring-integration-stream', version: "${springIntegrationVersion}"
     compile group: 'org.springframework.integration', name: 'spring-integration-http', version: "${springIntegrationVersion}"
+    compile group: 'org.springframework.integration', name: 'spring-integration-security', version: "${springIntegrationVersion}"
     compile group: 'org.springframework.integration', name: 'spring-integration-groovy'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
