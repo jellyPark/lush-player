@@ -1,29 +1,17 @@
 package com.lush.javaAggregator.configs;
 
-import com.lush.javaAggregator.interceptor.AggregatorInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 @Configuration
 @EnableWebMvc
 public class WebConfig implements  WebMvcConfigurer {
-
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(new AggregatorInterceptor())
-        .addPathPatterns("/*");
-//        .excludePathPatterns("/test/**/")
-//        .excludePathPatterns("/users/login"); //로그인 쪽은 예외처리를 한다.
-  }
-
 
   @Value("${message.classpath}")
   private String classPath;
