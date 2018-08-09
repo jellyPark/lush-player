@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
-public class IntegrationAutoConfig {
+public class IntegrationConfig {
 
 }
