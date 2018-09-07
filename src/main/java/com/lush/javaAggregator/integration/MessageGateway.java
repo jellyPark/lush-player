@@ -9,4 +9,5 @@ public interface MessageGateway {
 
   @Gateway(requestChannel = "inputChennel")
   void sendMessage(List<Object> payloads);
+  //void process(Message<Order> message);
 }

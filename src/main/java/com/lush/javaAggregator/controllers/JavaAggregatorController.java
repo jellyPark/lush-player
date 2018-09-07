@@ -1,12 +1,15 @@
 package com.lush.javaAggregator.controllers;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lush.javaAggregator.enums.ExceptionType;
+import com.lush.javaAggregator.enums.ResponseStatusType;
 import com.lush.javaAggregator.exceptions.BaseException;
+import com.lush.javaAggregator.modles.Audio;
+import com.lush.javaAggregator.modles.Podcast;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 public class JavaAggregatorController {
@@ -28,10 +30,6 @@ public class JavaAggregatorController {
 
   @Autowired
   private Util util;
-
-
-  @Autowired
-  private ObjectMapper mapper;
 
   @Autowired
   private MessageSource messageSource;
@@ -43,85 +41,65 @@ public class JavaAggregatorController {
   private HttpUtil httpUtil;
 
 
-  @GetMapping(value = "/sampleGetUri")
-  public String sampleGetUri() {
-    return util.getUri();
-  }
-
-  @GetMapping(value = "/validation/{id}")
-  public ResponseEntity<Object> validation(@PathVariable long id) throws Exception {
-
-    if (id < 1) {
-      /* Error Log Example */
-      logger.info("Error  : " + ExceptionType.INVALID_ID_VALUE.getMassage());
-      throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
-    }
-
-    if (util.checkPageNum()) {
-    } else {
-      throw new BaseException().setCommonExceptoin(ExceptionType.INVALID_ID_VALUE);
-      //추후에 페이지관련 ExceptionType 추가...
-    }
+  @GetMapping("/podcasts/podcasts")
+  public ResponseEntity<Object> getTest() {
 
     Response response = new Response();
-    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+
+    // login -> get token value
+    String tokenKey = util.login();
+
+    if (tokenKey != null && !"".equals(tokenKey)) {
+
+      // get podcasts service response
+      Map<String, Object> podcastsResponse = util.sendGetHttps("/podcasts/podcasts/33", tokenKey);
+      response = util.bindingResponse(podcastsResponse);
+
+      if (response.getStatus() == ResponseStatusType.OK) {
+
+        // get audio service response
+        Map<String, Object> audioResponse = util.sendGetHttps("/audio/audio/16", tokenKey);
+        response = util.bindingResponse(audioResponse);
+
+        if (response.getStatus() == ResponseStatusType.OK) {
+
+          List<Audio> audios = new ArrayList<>();
+          Audio audio = util.bindingAudio(audioResponse);
+          audios.add(audio);
+
+          // podcasts mapping
+          Podcast podcast = util.bindingPodcasts(podcastsResponse, audios);
+
+          response.setData(podcast);
+        }
+      }
+      return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+    } else {
+      throw new BaseException("Login FAIL.");
+    }
+
   }
 
-//  @PostMapping(value = "/{targetService}")
-//  public ResponseEntity<Object> postTest(@PathVariable String targetService,
-//      @RequestBody Map<String, Object> param) throws Exception {
-//
-//    logger.info("=============== " + targetService + "==================");
-//    /* Service Log Example :  util.getMethodType  */
-//    String targetMethodType = util.getMethodType();
-//    /* Request Log Example */
-//    logger.info("RequestParams : " + param);
-//    StringBuffer stringParamBuffer = new StringBuffer();
-//
-//    for (String key : param.keySet()) {
-//      logger.info("key : " + key + "/ value : " + param.get(key));
-//      stringParamBuffer.append(param.get(key));
-//    }
-//
-//    String stringParam = stringParamBuffer.toString();
-//
-//    Response response = util.callService(targetMethodType, stringParam);
-//
-//    /* Response Log Example */
-//    logger.info("Response :  " + response.toString());
-//
-//    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-//
-//  }
 
-  @GetMapping(value = "/{targetService}/{endpoint}")
-  public ResponseEntity<Object> getTest(@PathVariable String targetService,
-      @PathVariable String endpoint) {
+  @PostMapping("/podcasts/podcasts")
+  public ResponseEntity<Object> postTest(@RequestBody Map<String, Object> podcast) {
 
-    String targetMethodType = util.getMethodType();
-    Response response = util.callService(targetMethodType, null);
+    Response response = new Response();
 
-    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-  }
+    // login -> get token value
+    String tokenKey = util.login();
 
-  @DeleteMapping(value = "/{targetService}/{endpoint}")
-  public ResponseEntity<Object> deleteTest(@PathVariable String targetService,
-      @PathVariable long endpoint) {
+    if (tokenKey != null && !"".equals(tokenKey)) {
+      Map<String, Object> podcastsResponse = util
+          .sendPostHttps("/podcasts/podcasts", tokenKey, podcast);
 
-    logger.info("deleteTest");
-    String targetMethodType = util.getMethodType();
-    Response response = util.callService(targetMethodType, null);
+      response = util.bindingResponse(podcastsResponse);
 
-    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-  }
+      return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+    } else {
+      throw new BaseException("Login FAIL.");
+    }
 
-  @PostMapping(value = "/login")
-  public ResponseEntity<Object> signin(@RequestBody Map<String, Object> param) {
-
-    String targetMethodType = util.getMethodType();
-    Response response = util.callService(targetMethodType, param);
-
-    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
 }
