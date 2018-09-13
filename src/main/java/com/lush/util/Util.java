@@ -65,6 +65,7 @@ public class Util {
    *
    * @return token value.
    */
+  // 추후 해당 내용 삭제 -> Header에서 넘어오는 tokenKey를 추출하여 사용하는 방식으로 변경 진행 해야함.
   public String login() {
 
     Map<String, Object> loginInfo = new HashMap<>();
@@ -146,12 +147,18 @@ public class Util {
 
 
   /**
-   * Method name : sendGetHttps.
-   * Description : It transmits with "GET" method.
+   * Method name : callService.
+   * Description : Call the service.
    *
-   * @return Map
+   * @param endpoint
+   * @param tokenKey
+   * @param parameter
+   * @return
    */
-  public Map<String, Object> sendGetHttps(String endpoint, String tokenKey) {
+  // parameter로 endpoint를 받아야할지, 아니면 getUri()를 사용할 것인지 논의 필요.
+  // 현재 endpoint를 받아오는 이유는 두개의 endpoint를 호출해야 하는 경우가 발생하기 때문.
+  public Map<String, Object> callService(String endpoint, String tokenKey,
+      Map<String, Object> parameter) {
 
     HttpsURLConnection connection = null;
     URL url;
@@ -162,96 +169,33 @@ public class Util {
 
       // Create connection.
       String targetURL = setServiceURL(endpoint);
-
-      url = new URL(targetURL);
-      connection = (HttpsURLConnection) url.openConnection();
-      connection.setRequestMethod("GET");
-      connection.setRequestProperty("Content-Type", "application/json");
-      connection.setRequestProperty("Authorization", "Bearer " + tokenKey);
-      connection.setConnectTimeout(10000);
-      connection.setReadTimeout(5000);
-
-      responseCode = new Integer(connection.getResponseCode());
-      errorMessage = connection.getResponseMessage();
-      logger.info("Sending 'GET' request to URL : " + url);
-
-      // Set the result values.
-      BufferedReader reader = new BufferedReader(
-          new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
-
-      String inputLine;
-      StringBuffer stringBuffer = new StringBuffer();
-      while ((inputLine = reader.readLine()) != null) {
-        stringBuffer.append(inputLine);
-      }
-
-      Gson gson = new Gson();
-      Type outputType = new TypeToken<Map<String, Object>>() {
-      }.getType();
-      Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
-
-      reader.close();
-
-      return objectMap;
-
-    } catch (Exception e) {
-
-      e.printStackTrace();
-      throw new BaseException(responseCode,
-          errorMessage.length() > 0 ? errorMessage : e.getMessage());
-
-    } finally {
-      if (connection != null) {
-        logger.info(endpoint + "disconnect");
-        connection.disconnect();
-      }
-    }
-
-  }
-
-  /**
-   * Method name : sendPostHttps.
-   * Description : It transmits with "POST" method.
-   *
-   * @param endpoint
-   * @param tokenKey
-   * @param parameter
-   * @return Map
-   */
-  public Map<String, Object> sendPostHttps(String endpoint, String tokenKey,
-      Map<String, Object> parameter) {
-
-    HttpsURLConnection connection = null;
-    URL url;
-
-    try {
-
-      // Create connection.
-      String targetURL = setServiceURL(endpoint);
       url = new URL(targetURL);
       connection = (HttpsURLConnection) url.openConnection();
 
       // Add request header.
-      connection.setRequestMethod("POST");
+      String methodType = getMethodType();
+      connection.setRequestMethod(methodType);
       connection.setRequestProperty("Content-Type", "application/json");
       connection.setRequestProperty("Authorization", "Bearer " + tokenKey);
       connection.setConnectTimeout(10000);
       connection.setReadTimeout(5000);
       connection.setDoOutput(true);
       connection.setDoInput(true);
-      connection.connect(); //connect
+      connection.connect();
 
-      // Map<String, Object> to JsonObject
-      JsonObject jsonParmeter = bindingJson(parameter);
+      if ("POST".equals(methodType) || "PUT".equals(methodType)) {
+        // Map<String, Object> to JsonObject
+        JsonObject jsonParmeter = bindingJson(parameter);
 
-      // Send Parameter
-      OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-      out.write(jsonParmeter.toString());
-      out.close();
+        // Send Parameter
+        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+        out.write(jsonParmeter.toString());
+        out.close();
+      }
 
-      int responseCode = connection.getResponseCode();
-
-      logger.info("\nSending 'POST' request to URL : " + url);
+      responseCode = new Integer(connection.getResponseCode());
+      errorMessage = connection.getResponseMessage();
+      logger.info("Sending '" + methodType + "' request to URL : " + url);
 
       if (responseCode == HttpURLConnection.HTTP_OK) {
 
@@ -264,6 +208,7 @@ public class Util {
         while ((inputLine = reader.readLine()) != null) {
           stringBuffer.append(inputLine);
         }
+
         Gson gson = new Gson();
         Type outputType = new TypeToken<Map<String, Object>>() {
         }.getType();
@@ -273,15 +218,14 @@ public class Util {
         return objectMap;
 
       } else {
-        logger.info("fail");
-        logger.info("Response Code : " + responseCode);
-        logger.info("Response Message : " + connection.getResponseMessage());
-        return null;
+        throw new BaseException(responseCode, errorMessage);
       }
 
     } catch (Exception e) {
+
       e.printStackTrace();
-      throw new BaseException(e.getMessage());
+      throw new BaseException(responseCode,
+          errorMessage.length() > 0 ? errorMessage : e.getMessage());
 
     } finally {
 
@@ -290,188 +234,7 @@ public class Util {
         connection.disconnect();
       }
     }
-  }
 
-
-  /**
-   * Method name : getMethodType.
-   * Description : Get the method type of RequestMapping.
-   *
-   * @return String
-   */
-  public String getMethodType() {
-    return request.getMethod();
-  }
-
-  /**
-   * Method name : getUri.
-   * Description : Get the endpoint.
-   *
-   * @return String
-   */
-  public String getUri() {
-    return request.getRequestURI();
-  }
-
-  /**
-   * Method name : setServiceURL.
-   * Description : Create a microservice URL.
-   *
-   * @return String
-   */
-  private String setServiceURL(String endpoint) {
-
-    if ("/login".equals(endpoint)) {
-      return "https://" + gateway_uri + "-" + environment + "." + domain + endpoint;
-    } else {
-      return "https://" + gateway_uri + "-" + environment + "." + domain + "/service" + endpoint;
-    }
-
-  }
-
-//  public Response callService(String methodType, Map<String, Object> param) {
-//
-//    Map<String, Object> resultMap = null;
-//    Response response = new Response();
-//
-//    if ("GET".equals(methodType)) {
-////      resultMap = sendGetHttps();
-//    } else if ("POST".equals(methodType)) {
-//      resultMap = sendPostHttps(param);
-//    } else if ("PUT".equals(methodType)) {
-//
-//    } else if ("PATCH".equals(methodType)) {
-//
-//    } else if ("DELETE".equals(methodType)) {
-//      resultMap = sendDeleteHttps(param);
-//    }
-//
-//    Integer code = (int) Double.parseDouble(resultMap.get("code").toString());
-//
-//    if (code == 200) {
-//
-//      response.setStatus(ResponseStatusType.OK);
-//      response.setCode(code);
-//      response.setMessage(resultMap.get("message").toString());
-//      response.setData(resultMap.get("data"));
-//
-//    } else {
-//
-//      response.setStatus(ResponseStatusType.FAIL);
-//      response.setCode(code);
-//      response.setMessage(resultMap.get("message").toString());
-//      response.setData(resultMap.get("data"));
-//
-//    }
-//
-//    return response;
-//  }
-
-
-  private Map<String, Object> sendDeleteHttps(Map<String, Object> param) {
-
-    HttpsURLConnection connection = null;
-    URL url;
-    Integer responseCode = 200;
-    String errorMessage = "";
-
-    try {
-
-      // Create connection.
-      String targetURL = "";//setServiceURL(endpoint);
-      url = new URL(targetURL);
-      connection = (HttpsURLConnection) url.openConnection();
-      connection.setRequestMethod("DELETE");
-      connection.setRequestProperty("Content-Type", "application/json");
-      connection.setConnectTimeout(10000);
-      connection.setReadTimeout(5000);
-
-      responseCode = new Integer(connection.getResponseCode());
-      errorMessage = connection.getResponseMessage();
-      logger.info("\nSending 'DELETE' request to URL : " + url);
-
-      // Set the result values.
-      BufferedReader reader = new BufferedReader(
-          new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
-
-      String inputLine;
-      StringBuffer stringBuffer = new StringBuffer();
-      while ((inputLine = reader.readLine()) != null) {
-        stringBuffer.append(inputLine);
-      }
-
-      Gson gson = new Gson();
-      Type outputType = new TypeToken<Map<String, Object>>() {
-      }.getType();
-      Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
-
-      logger.info("Sending 'DELETE' response : " + stringBuffer.toString());
-
-      reader.close();
-      return objectMap;
-
-    } catch (Exception e) {
-
-      e.printStackTrace();
-
-      throw new BaseException(responseCode,
-          errorMessage.length() > 0 ? errorMessage : e.getMessage());
-
-    } finally {
-
-      if (connection != null) {
-        connection.disconnect();
-      }
-    }
-
-  }
-
-
-  /**
-   * Method name : getParams.
-   * Description :
-   *
-   * @return Map
-   */
-  public Map<String, Object> getParams(Map<String, Object> params) throws Exception {
-    Map<String, Object> reqMap = new HashMap<String, Object>();
-
-    if (params.equals("")) {
-      logger.info("requestParams is null");
-    } else {
-      String methodType = request.getMethod();
-      if (methodType.equals("POST") || methodType.equals("PUT")) {
-/*        ObjectMapper mapper = new ObjectMapper();
-        reqMap = mapper.readValue(params, new TypeReference<HashMap>() {
-        });*/
-        reqMap.putAll(params);
-      } else {
-        Enumeration e = request.getParameterNames();
-        while (e.hasMoreElements()) {
-          String strKey = (String) e.nextElement();
-          Object strVal[] = request.getParameterValues(strKey);
-          if (!reqMap.containsKey(strKey)) {
-            reqMap.put(strKey, strVal[0]);
-          }
-        }
-      }
-    }
-    return reqMap;
-  }
-
-  public boolean checkPageNum() throws Exception {
-    boolean check = true;
-    String methodType = request.getMethod();
-    System.out.println("  request.getParameter : " + request.getParameter("page"));
-    if (methodType.equals("GET")) {
-      String pageNum = request.getParameter("page");
-      if (pageNum != null) {
-        if (Integer.parseInt(pageNum) < 0) {
-          check = false;
-        }
-      }
-    }
-    return check;
   }
 
 /*******************************************************
@@ -614,5 +377,90 @@ public class Util {
     return jsonParameter;
   }
 
+  /*******************************************************
+   * Utils
+   *******************************************************/
 
+  /**
+   * Method name : getUri.
+   * Description : Get the endpoint.
+   *
+   * @return String
+   */
+  public String getUri() {
+    return request.getRequestURI();
+  }
+
+  /**
+   * Method name : setServiceURL.
+   * Description : Create a microservice URL.
+   *
+   * @return String
+   */
+  private String setServiceURL(String endpoint) {
+
+    if ("/login".equals(endpoint)) {
+      return "https://" + gateway_uri + "-" + environment + "." + domain + endpoint;
+    } else {
+      return "https://" + gateway_uri + "-" + environment + "." + domain + "/service" + endpoint;
+    }
+  }
+
+  /**
+   * Method name : getMethodType.
+   * Description : Get the method type of RequestMapping.
+   *
+   * @return String
+   */
+  public String getMethodType() {
+    return request.getMethod();
+  }
+
+
+  /**
+   * Method name : getParams.
+   * Description :
+   *
+   * @return Map
+   */
+  public Map<String, Object> getParams(Map<String, Object> params) throws Exception {
+    Map<String, Object> reqMap = new HashMap<String, Object>();
+
+    if (params.equals("")) {
+      logger.info("requestParams is null");
+    } else {
+      String methodType = request.getMethod();
+      if (methodType.equals("POST") || methodType.equals("PUT")) {
+/*        ObjectMapper mapper = new ObjectMapper();
+        reqMap = mapper.readValue(params, new TypeReference<HashMap>() {
+        });*/
+        reqMap.putAll(params);
+      } else {
+        Enumeration e = request.getParameterNames();
+        while (e.hasMoreElements()) {
+          String strKey = (String) e.nextElement();
+          Object strVal[] = request.getParameterValues(strKey);
+          if (!reqMap.containsKey(strKey)) {
+            reqMap.put(strKey, strVal[0]);
+          }
+        }
+      }
+    }
+    return reqMap;
+  }
+
+  public boolean checkPageNum() throws Exception {
+    boolean check = true;
+    String methodType = request.getMethod();
+    System.out.println("  request.getParameter : " + request.getParameter("page"));
+    if (methodType.equals("GET")) {
+      String pageNum = request.getParameter("page");
+      if (pageNum != null) {
+        if (Integer.parseInt(pageNum) < 0) {
+          check = false;
+        }
+      }
+    }
+    return check;
+  }
 }
