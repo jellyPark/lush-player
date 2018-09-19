@@ -82,6 +82,7 @@ public class JavaAggregatorController {
           response.setData(podcast);
         }
       }
+
       return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
     } else {
       throw new BaseException("Login FAIL.");
