@@ -2,6 +2,7 @@ package com.lush.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import com.lush.javaAggregator.enums.ExceptionType;
 import com.lush.javaAggregator.enums.ResponseStatusType;
 import com.lush.javaAggregator.exceptions.BaseException;
 import com.lush.javaAggregator.modles.Audio;
@@ -123,7 +124,7 @@ public class Util {
         return objectMap;
 
       } else {
-        throw new BaseException(responseCode, errorMessage);
+        throw new BaseException().setCommonExceptoin(ExceptionType.NOT_FOUND_DATA);
       }
     } catch (Exception e) {
 

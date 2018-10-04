@@ -1,16 +1,12 @@
 package com.lush.javaAggregator.controllers;
 
 
-import com.lush.javaAggregator.enums.ResponseStatusType;
 import com.lush.javaAggregator.exceptions.BaseException;
-import com.lush.javaAggregator.modles.Audio;
-import com.lush.javaAggregator.modles.Podcast;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,40 +44,25 @@ public class JavaAggregatorController {
    *
    * @return ResponseEntity
    */
-  @GetMapping("/podcasts/podcasts")
-  public ResponseEntity<Object> getTest() {
+  @GetMapping
+  public ResponseEntity<Object> get(@RequestBody HttpServletRequest request) {
 
     Response response = new Response();
 
-    // login -> get token value
-    String tokenKey = util.login();
+    //get uri
+    String url = util.getUri();
+
+    //setRequest(가공-토큰추출 및 리퀘스트가공)
+    //HttpRequest setRequest = util.setRequest(request);
+
+    //get token value
+    String tokenKey = "";
+    //String tokenkey = util.getTokenKey(setRequest);
 
     if (tokenKey != null && !"".equals(tokenKey)) {
-
-      // get podcasts service response
-      Map<String, Object> podcastsResponse = util
-          .callService("/podcasts/podcasts/33", tokenKey, null);
-      response = util.bindingResponse(podcastsResponse);
-
-      if (response.getStatus() == ResponseStatusType.OK) {
-
-        // get audio service response
-        Map<String, Object> audioResponse = util.callService("/audio/audio/16", tokenKey, null);
-        response = util.bindingResponse(audioResponse);
-
-        if (response.getStatus() == ResponseStatusType.OK) {
-
-          List<Audio> audios = new ArrayList<>();
-          Audio audio = util.bindingAudio(audioResponse);
-          audios.add(audio);
-
-          // podcasts mapping
-          Podcast podcast = util.bindingPodcasts(podcastsResponse, audios);
-
-          response.setData(podcast);
-        }
-      }
-
+//      Map<String, Object> serviceResponse = util.callService(tokenKey, setRequest);
+//
+//      response = util.bindingResponse(serviceResponse);
       return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
     } else {
       throw new BaseException("Login FAIL.");
@@ -94,21 +74,25 @@ public class JavaAggregatorController {
   /**
    * Post service.
    *
-   * @param podcast
+   * @param params
    * @return ResponseEntity
    */
-  @PostMapping("/podcasts/podcasts")
-  public ResponseEntity<Object> postTest(@RequestBody Map<String, Object> podcast) {
+  @PostMapping
+  public ResponseEntity<Object> post(@RequestBody HttpServletRequest request,
+      Map<String, Object> params) {
 
     Response response = new Response();
+    //setRequest(가공-토큰추출 및 리퀘스트가공)
+    //HttpRequest setRequest = util.setRequest(request, params);
 
-    // login -> get token value
-    String tokenKey = util.login();
+    //get token value
+    String tokenKey = "";
+    //String tokenkey = util.getTokenKey(setRequest);
 
     if (tokenKey != null && !"".equals(tokenKey)) {
-      Map<String, Object> podcastsResponse = util.callService(util.getUri(), tokenKey, podcast);
-
-      response = util.bindingResponse(podcastsResponse);
+//      Map<String, Object> serviceResponse = util.callService(tokenKey, setRequest);
+//
+//      response = util.bindingResponse(serviceResponse);
 
       return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
     } else {
@@ -117,19 +101,22 @@ public class JavaAggregatorController {
 
   }
 
-  @PutMapping("/podcasts/podcasts/{id}")
-  public ResponseEntity<Object> putTest(@PathVariable long id,
-      @RequestBody Map<String, Object> podcast) {
+  @PutMapping
+  public ResponseEntity<Object> put(@RequestBody Map<String, Object> params) {
 
     Response response = new Response();
 
-    // login -> get token value
-    String tokenKey = util.login();
+    //setRequest(가공-토큰추출 및 리퀘스트가공)
+    //HttpRequest setRequest = util.setRequest(request, params);
+
+    //get token value
+    String tokenKey = "";
+    //String tokenkey = util.getTokenKey(setRequest);
 
     if (tokenKey != null && !"".equals(tokenKey)) {
-      Map<String, Object> podcastsResponse = util.callService(util.getUri(), tokenKey, podcast);
-
-      response = util.bindingResponse(podcastsResponse);
+//      Map<String, Object> serviceResponse = util.callService(tokenKey, setRequest);
+//
+//      response = util.bindingResponse(serviceResponse);
 
       return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
     } else {
@@ -137,18 +124,22 @@ public class JavaAggregatorController {
     }
   }
 
-  @DeleteMapping("/podcasts/podcasts/{id}")
-  public ResponseEntity<Object> deleteTest(@PathVariable long id) {
+  @DeleteMapping
+  public ResponseEntity<Object> delete() {
 
     Response response = new Response();
 
-    // login -> get token value
-    String tokenKey = util.login();
+    //setRequest(가공-토큰추출 및 리퀘스트가공)
+    //HttpRequest setRequest = util.setRequest(request, params);
+
+    //get token value
+    String tokenKey = "";
+    //String tokenkey = util.getTokenKey(setRequest);
 
     if (tokenKey != null && !"".equals(tokenKey)) {
-      Map<String, Object> podcastsResponse = util.callService(util.getUri(), tokenKey, null);
-
-      response = util.bindingResponse(podcastsResponse);
+//      Map<String, Object> serviceResponse = util.callService(tokenKey, setRequest);
+//
+//      response = util.bindingResponse(serviceResponse);
 
       return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
     } else {
