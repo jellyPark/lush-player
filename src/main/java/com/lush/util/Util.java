@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.lush.javaAggregator.enums.ResponseStatusType;
 import com.lush.javaAggregator.exceptions.BaseException;
-import com.lush.javaAggregator.integration.IntegrationConfig;
 import com.lush.javaAggregator.modles.Audio;
 import com.lush.javaAggregator.modles.Podcast;
 import com.lush.javaAggregator.modles.Response;
@@ -57,9 +56,6 @@ public class Util {
    */
   @Autowired
   private ModelMapper modelMapper;
-
-  @Autowired
-  private IntegrationConfig integrationConfig;
 
   /**
    * Get a login token.

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -49,8 +50,10 @@ public class JavaAggregatorController {
    *
    * @return ResponseEntity
    */
-  @GetMapping("/podcasts/podcasts")
-  public ResponseEntity<Object> getTest() {
+  @GetMapping
+  public ResponseEntity<Object> getTest(@RequestParam Map<String, Object> param) {
+
+    System.out.println("aaaaaaaaa>>>" + param);
 
     Response response = new Response();
 
