@@ -6,6 +6,7 @@ package com.lush.javaAggregator.enums;
  */
 public enum ExceptionType {
 
+  BAD_REQEUST(400, "bad request"),
   /**
    * Not found data exception.
    */
