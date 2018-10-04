@@ -1,6 +1,6 @@
 package com.lush.javaAggregator.modles;
 
-import javax.persistence.Transient;
+//import javax.persistence.Transient;
 
 public class Audio {
 
@@ -24,7 +24,7 @@ public class Audio {
   /**
    * Type of attached file.
    */
-  @Transient
+//  @Transient
   private String resource_type;
 
   /**
@@ -60,13 +60,13 @@ public class Audio {
   /**
    * The URL of the file on the CDN for reference.
    */
-  @Transient
+//  @Transient
   private String url;
 
   /**
    * Security enhanced URL.
    */
-  @Transient
+//  @Transient
   private String secure_url;
 
   /**

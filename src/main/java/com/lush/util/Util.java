@@ -4,18 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.lush.javaAggregator.enums.ResponseStatusType;
 import com.lush.javaAggregator.exceptions.BaseException;
-import com.lush.javaAggregator.integration.IntegrationConfig;
 import com.lush.javaAggregator.modles.Audio;
 import com.lush.javaAggregator.modles.Podcast;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.modles.Token;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -58,9 +55,6 @@ public class Util {
   @Autowired
   private ModelMapper modelMapper;
 
-  @Autowired
-  private IntegrationConfig integrationConfig;
-
   /**
    * Get a login token.
    *
@@ -73,78 +67,6 @@ public class Util {
     Map<String, Object> loginInfo = new HashMap<>();
     loginInfo.put("email", "webdev@lush.co.uk");
     loginInfo.put("password", "13 young START quarter 75");
-
-    HttpsURLConnection connection = null;
-    URL url;
-
-//    try {
-//
-//      // Create connection.
-//      String targetURL = "https://" + gateway_uri + "-" + environment + "." + domain + "/login";
-//      url = new URL(targetURL);
-//      connection = (HttpsURLConnection) url.openConnection();
-//
-//      // Add request header.
-//      connection.setRequestMethod("POST");
-//      connection.setRequestProperty("Content-Type", "application/json");
-//      connection.setConnectTimeout(10000);
-//      connection.setReadTimeout(5000);
-//      connection.setDoOutput(true);
-//      connection.setDoInput(true);
-//      connection.connect();
-//
-//      // Map<String, Object> to JsonObject
-//      JsonObject jsonParmeter = bindingJson(loginInfo);
-//
-//      // Send Parameter
-//      OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-//      out.write(jsonParmeter.toString());
-//      out.close();
-//
-//      int responseCode = connection.getResponseCode();
-//
-//      logger.info("\nSending 'POST' request to URL : " + url);
-//
-//      if (responseCode == HttpURLConnection.HTTP_OK) {
-//
-//        // Set the result values.
-//        BufferedReader reader = new BufferedReader(
-//            new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
-//
-//        String inputLine;
-//        StringBuffer stringBuffer = new StringBuffer();
-//        while ((inputLine = reader.readLine()) != null) {
-//          stringBuffer.append(inputLine);
-//        }
-//        Gson gson = new Gson();
-//        Type outputType = new TypeToken<Map<String, Object>>() {
-//        }.getType();
-//        Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
-//
-//        Token key = getTokenKey(objectMap);
-//
-//        reader.close();
-//        return key.getValue();
-//
-//      } else {
-//        logger.info("fail");
-//        logger.info("Response Code : " + responseCode);
-//        logger.info("Response Message : " + connection.getResponseMessage());
-//        return null;
-//      }
-//
-//    } catch (Exception e) {
-//
-//      e.printStackTrace();
-//      throw new BaseException(e.getMessage());
-//
-//    } finally {
-//
-//      if (connection != null) {
-//        logger.info("login disconnection");
-//        connection.disconnect();
-//      }
-//    }
 
     String targetUri = "https://" + gateway_uri + "-" + environment + "." + domain + "/login";
     Map<String, Object> objectMap = restTemplate.postForObject(targetUri, loginInfo, Map.class);
@@ -168,9 +90,8 @@ public class Util {
   // 현재 endpoint를 받아오는 이유는 두개의 endpoint를 호출해야 하는 경우가 발생하기 때문.
   public Map<String, Object> callService(String endpoint, String tokenKey,
       Map<String, Object> parameter) {
+
     RestTemplate restTemplate = new RestTemplate();
-//    HttpsURLConnection connection = null;
-//    URL url;
     Integer responseCode = 200;
     String errorMessage = "";
     String targetURL = setServiceURL(endpoint);
@@ -187,7 +108,6 @@ public class Util {
             .exchange(targetURL, HttpMethod.resolve(methodType), httpEntity, Object.class);
         responseCode = response.getStatusCodeValue();
         ObjectMapper mapper = new ObjectMapper();
-        //String responseBody = response.getBody().toString();
         objectMap = mapper.convertValue(response.getBody(), Map.class);
       } else {
         HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
@@ -195,7 +115,6 @@ public class Util {
             .exchange(targetURL, HttpMethod.resolve(methodType), httpEntity, Object.class);
         responseCode = response.getStatusCodeValue();
         ObjectMapper mapper = new ObjectMapper();
-        //String responseBody = response.getBody().toString();
         objectMap = mapper.convertValue(response.getBody(), Map.class);
       }
       logger.info("Sending '" + methodType + "' request to URL : " + targetURL);
@@ -213,76 +132,6 @@ public class Util {
           errorMessage.length() > 0 ? errorMessage : e.getMessage());
 
     }
-
-//    try {
-//
-//      // Create connection.
-//      String targetURL = setServiceURL(endpoint);
-//      url = new URL(targetURL);
-//      connection = (HttpsURLConnection) url.openConnection();
-//
-//      // Add request header.
-//      String methodType = getMethodType();
-//      connection.setRequestMethod(methodType);
-//      connection.setRequestProperty("Content-Type", "application/json");
-//      connection.setRequestProperty("Authorization", "Bearer " + tokenKey);
-//      connection.setConnectTimeout(10000);
-//      connection.setReadTimeout(5000);
-//      connection.setDoOutput(true);
-//      connection.setDoInput(true);
-//      connection.connect();
-//
-//      if ("POST".equals(methodType) || "PUT".equals(methodType)) {
-//        // Map<String, Object> to JsonObject
-//        JsonObject jsonParmeter = bindingJson(parameter);
-//
-//        // Send Parameter
-//        OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-//        out.write(jsonParmeter.toString());
-//        out.close();
-//      }
-//
-//      responseCode = new Integer(connection.getResponseCode());
-//      errorMessage = connection.getResponseMessage();
-//      logger.info("Sending '" + methodType + "' request to URL : " + url);
-//
-//      if (responseCode == HttpURLConnection.HTTP_OK) {
-//
-//        // Set the result values.
-//        BufferedReader reader = new BufferedReader(
-//            new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")));
-//
-//        String inputLine;
-//        StringBuffer stringBuffer = new StringBuffer();
-//        while ((inputLine = reader.readLine()) != null) {
-//          stringBuffer.append(inputLine);
-//        }
-//
-//        Gson gson = new Gson();
-//        Type outputType = new TypeToken<Map<String, Object>>() {
-//        }.getType();
-//        Map<String, Object> objectMap = gson.fromJson(stringBuffer.toString(), outputType);
-//
-//        reader.close();
-//        return objectMap;
-//
-//      } else {
-//        throw new BaseException(responseCode, errorMessage);
-//      }
-//
-//    } catch (Exception e) {
-//
-//      e.printStackTrace();
-//      throw new BaseException(responseCode,
-//          errorMessage.length() > 0 ? errorMessage : e.getMessage());
-//
-//    } finally {
-//
-//      if (connection != null) {
-//        logger.info(endpoint + " : disconnection");
-//        connection.disconnect();
-//      }
-//    }
 
   }
 
@@ -480,9 +329,6 @@ public class Util {
     } else {
       String methodType = request.getMethod();
       if (methodType.equals("POST") || methodType.equals("PUT")) {
-/*        ObjectMapper mapper = new ObjectMapper();
-        reqMap = mapper.readValue(params, new TypeReference<HashMap>() {
-        });*/
         reqMap.putAll(params);
       } else {
         Enumeration e = request.getParameterNames();
