@@ -1,6 +1,7 @@
 package com.lush.javaAggregator.controllers;
 
 
+import com.lush.javaAggregator.aggregator.ServiceNameAggregator;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,9 +28,6 @@ public class JavaAggregatorController {
   @Autowired
   private Util util;
 
-  @Autowired
-  private MessageSource messageSource;
-
   /**
    * Define Utils for get response headers.
    */
@@ -39,6 +36,9 @@ public class JavaAggregatorController {
 
   @Autowired
   private HttpServletRequest request;
+
+  @Autowired
+  private ServiceNameAggregator serviceNameAggregator;
 
   /**
    * Get service.
@@ -50,16 +50,12 @@ public class JavaAggregatorController {
 
     Response response = new Response();
 
-    //setRequest(토큰추출 및 리퀘스트가공)
-    //Map<String, Object> setRequest = util.setRequest(request);
     //get url
     String url = util.getUrl(request);
-    System.out.println("####  utl :  " + url);
 
     //get serviceName
     String serviceName = util.getServiceName(url);
-    System.out.println("#### serviceName  :  " + serviceName);
-//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("GET",
+    //      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("GET",
 //         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
 
 //      response = util.bindingResponse(serviceResponse);
@@ -78,13 +74,13 @@ public class JavaAggregatorController {
 
     Response response = new Response();
 
-    //get uri
-    String uri = "";
+    //get url
+    String url = util.getUrl(request);
 
     //get serviceName
-    String serviceName = "";
+    String serviceName = util.getServiceName(url);
 
-//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("POST",
+//      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("POST",
 //         url, serviceName, params, HttpServletRequest request);
 
 //      response = util.bindingResponse(serviceResponse);
@@ -98,13 +94,13 @@ public class JavaAggregatorController {
 
     Response response = new Response();
 
-    //get uri
-    String uri = "";
+    //get url
+    String url = util.getUrl(request);
 
     //get serviceName
-    String serviceName = "";
+    String serviceName = util.getServiceName(url);
 
-//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("PUT",
+//      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("PUT",
 //         url, serviceName, params, HttpServletRequest request);
 
 //      response = util.bindingResponse(serviceResponse);
@@ -117,13 +113,13 @@ public class JavaAggregatorController {
 
     Response response = new Response();
 
-    //get uri
-    String uri = "";
+    //get url
+    String url = util.getUrl(request);
 
     //get serviceName
-    String serviceName = "";
+    String serviceName = util.getServiceName(url);
 
-//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("DELETE",
+//      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
 //         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
 
 //      response = util.bindingResponse(serviceResponse);
