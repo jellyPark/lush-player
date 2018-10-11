@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  *
  */
-@Service
+@Component
 public class ServiceNameAggregator {
 
   static final Logger logger = LoggerFactory.getLogger(ServiceNameAggregator.class);
@@ -20,19 +20,21 @@ public class ServiceNameAggregator {
   @Autowired
   private Util util;
 
-  public Map<String, Object> serviceNameAggregator(String requestMethod, String url,
+  public Map<String, Object> callServiceNameAggregator(String requestMethod, String url,
       String serviceName, Map<String, Object> param, HttpServletRequest request) {
 
     Map<String, Object> response = new HashMap<String, Object>();
 
     //service1 호출
     response = util.callService(requestMethod, url, serviceName, param, request);
+    System.out.println("####### [Aggregator]Call Service #######");
 
     //service2 호출
     //Map<String, Object> serviceNameResponse2 = util.callService(url, serviceName,
     //                                      new HashMap<String, Object>(), request);
 
     //최종 가공.
+    System.out.println("####### [Aggregator]Return Make Response data #######");
 
     return response;
   }

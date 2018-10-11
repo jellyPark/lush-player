@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,9 +28,6 @@ public class JavaAggregatorController {
 
   @Autowired
   private Util util;
-
-  @Autowired
-  private MessageSource messageSource;
 
   /**
    * Define Utils for get response headers.
@@ -62,12 +58,15 @@ public class JavaAggregatorController {
 
     //get serviceName
     String serviceName = util.getServiceName(url);
-    System.out.println("#### serviceName  :  " + serviceName);
-    Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("GET",
+
+
+    System.out.println("####### Call Aggregator #######");
+    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("GET",
          url, serviceName, new HashMap<String, Object>(), request);
 
     response = util.bindingResponse(serviceResponse);
 
+    System.out.println("####### Return responseEntity #######");
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
@@ -87,12 +86,12 @@ public class JavaAggregatorController {
 //    String url = util.setServiceURL("/podcasts/podcasts"); //test
 
     //get serviceName
-    String serviceName = "";
+    String serviceName = util.getServiceName(url);
 
-      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("POST",
+    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("POST",
          url, serviceName, params, request);
 
-      response = util.bindingResponse(serviceResponse);
+    response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
 
@@ -108,9 +107,9 @@ public class JavaAggregatorController {
 //    String url = util.setServiceURL("/podcasts/podcasts/41"); //test
 
     //get serviceName
-    String serviceName = "";
+    String serviceName = util.getServiceName(url);
 
-      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("PUT",
+      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("PUT",
          url, serviceName, params, request);
 
       response = util.bindingResponse(serviceResponse);
@@ -128,9 +127,9 @@ public class JavaAggregatorController {
 //    String url = util.setServiceURL("/podcasts/podcasts/41");  //test
 
     //get serviceName
-    String serviceName = "";
+    String serviceName = util.getServiceName(url);
 
-      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("DELETE",
+      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
          url, serviceName, new HashMap<String, Object>(), request);
 
       response = util.bindingResponse(serviceResponse);
