@@ -28,12 +28,13 @@ public class ServiceNameAggregator {
     //service1 호출
     // Map<String, Object> serviceNameResponse1 = util.callService(url, serviceName,
     //                                      new HashMap<String, Object>(), request);
-
+    System.out.println("####### [Aggregator]Call Service #######");
     //service2 호출
     //Map<String, Object> serviceNameResponse2 = util.callService(url, serviceName,
     //                                      new HashMap<String, Object>(), request);
 
     //최종 가공.
+    System.out.println("####### [Aggregator]Return Make Response data #######");
 
     return response;
   }

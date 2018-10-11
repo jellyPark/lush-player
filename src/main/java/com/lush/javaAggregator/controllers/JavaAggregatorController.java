@@ -52,14 +52,18 @@ public class JavaAggregatorController {
 
     //get url
     String url = util.getUrl(request);
+    System.out.println("## getUrl : " + url);
 
     //get serviceName
     String serviceName = util.getServiceName(url);
+    System.out.println("## getServiceName : " + serviceName);
+
     //      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("GET",
 //         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
+    System.out.println("####### Call Aggregator #######");
 
 //      response = util.bindingResponse(serviceResponse);
-
+    System.out.println("####### return responseEntity #######");
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
