@@ -1,9 +1,11 @@
 package com.lush.javaAggregator.controllers;
 
 
+import com.lush.javaAggregator.aggregator.ServiceNameAggregator;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -40,29 +42,31 @@ public class JavaAggregatorController {
   @Autowired
   private HttpServletRequest request;
 
+  @Autowired
+  private ServiceNameAggregator serviceNameAggregator;
+
   /**
    * Get service.
    *
    * @return ResponseEntity
    */
-  @GetMapping
+  @GetMapping(value = "/get")
   public ResponseEntity<Object> get() {
 
     Response response = new Response();
 
-    //setRequest(토큰추출 및 리퀘스트가공)
-    //Map<String, Object> setRequest = util.setRequest(request);
     //get url
     String url = util.getUrl(request);
-    System.out.println("####  utl :  " + url);
+//    String url = util.setServiceURL("/podcasts/podcasts"); // test
+    System.out.println("####  url :  " + url);
 
     //get serviceName
     String serviceName = util.getServiceName(url);
     System.out.println("#### serviceName  :  " + serviceName);
-//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("GET",
-//         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
+    Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("GET",
+         url, serviceName, new HashMap<String, Object>(), request);
 
-//      response = util.bindingResponse(serviceResponse);
+    response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
@@ -73,60 +77,64 @@ public class JavaAggregatorController {
    * @param params
    * @return ResponseEntity
    */
-  @PostMapping
+  @PostMapping("/post")
   public ResponseEntity<Object> post(@RequestBody Map<String, Object> params) throws Exception{
 
     Response response = new Response();
 
-    //get uri
-    String uri = "";
+    //get url
+    String url = util.getUrl(request);
+//    String url = util.setServiceURL("/podcasts/podcasts"); //test
 
     //get serviceName
     String serviceName = "";
 
-//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("POST",
-//         url, serviceName, params, HttpServletRequest request);
+      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("POST",
+         url, serviceName, params, request);
 
-//      response = util.bindingResponse(serviceResponse);
+      response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
 
   }
 
-  @PutMapping
+  @PutMapping("/put")
   public ResponseEntity<Object> put(@RequestBody Map<String, Object> params) {
 
     Response response = new Response();
 
-    //get uri
-    String uri = "";
+    //get url
+    String url = util.getUrl(request);
+//    String url = util.setServiceURL("/podcasts/podcasts/41"); //test
 
     //get serviceName
     String serviceName = "";
 
-//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("PUT",
-//         url, serviceName, params, HttpServletRequest request);
+      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("PUT",
+         url, serviceName, params, request);
 
-//      response = util.bindingResponse(serviceResponse);
+      response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
-  @DeleteMapping
+  @DeleteMapping("delete")
   public ResponseEntity<Object> delete() {
 
     Response response = new Response();
 
-    //get uri
-    String uri = "";
+    //get url
+    String url = util.getUrl(request);
+//    String url = util.setServiceURL("/podcasts/podcasts/41");  //test
 
     //get serviceName
     String serviceName = "";
 
-//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("DELETE",
-//         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
+      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("DELETE",
+         url, serviceName, new HashMap<String, Object>(), request);
 
-//      response = util.bindingResponse(serviceResponse);
+      response = util.bindingResponse(serviceResponse);
+
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 

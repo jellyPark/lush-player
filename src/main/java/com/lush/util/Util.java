@@ -1,6 +1,7 @@
 package com.lush.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lush.javaAggregator.enums.ExceptionType;
 import com.lush.javaAggregator.enums.ResponseStatusType;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -42,6 +44,12 @@ public class Util {
   private String aggregator_prefix;
 
   /**
+   * Define Gson for json convert and parse.
+   */
+  @Autowired
+  private Gson gson;
+
+  /**
    * Model mapper.
    */
   @Autowired
@@ -51,28 +59,26 @@ public class Util {
    * Method name : callService.
    * Description : Call the service.
    *
-   * @param url
-   * @param request
    * @param methodType
+   * @param url
+   * @param serviceName
+   * @param param
+   * @param request
    * @return
    */
-  public Map<String, Object> callService(String url, HttpServletRequest request, String methodType) {
+  public Map<String, Object> callService(String methodType, String url, String serviceName, Map<String, Object> param, HttpServletRequest request) {
 
     RestTemplate restTemplate = new RestTemplate();
     Integer responseCode = 200;
     String errorMessage = "";
     Map<String, Object> objectMap = null;
 
-    // Add request header.
-    HttpHeaders headers = new HttpHeaders();
-
     try {
       if ("POST".equals(methodType) || "PUT".equals(methodType)) {
 
-        HttpEntity<Object> httpEntity = new HttpEntity<Object>(request);
+        HttpEntity<Object> httpEntity = new HttpEntity<Object>(param, getHeader(request));
 
-        ResponseEntity<Object> response = restTemplate
-            .exchange(url, HttpMethod.resolve(methodType), httpEntity, Object.class);
+        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.resolve(methodType), httpEntity, Object.class);
 
         responseCode = response.getStatusCodeValue();
         ObjectMapper mapper = new ObjectMapper();
@@ -80,14 +86,14 @@ public class Util {
 
       } else {
 
-        HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
+        HttpEntity<Object> httpEntity = new HttpEntity<Object>(getHeader(request));
 
-        ResponseEntity<Object> response = restTemplate
-            .exchange(url, HttpMethod.resolve(methodType), httpEntity, Object.class);
+        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.resolve(methodType), httpEntity, Object.class);
 
         responseCode = response.getStatusCodeValue();
         ObjectMapper mapper = new ObjectMapper();
         objectMap = mapper.convertValue(response.getBody(), Map.class);
+
       }
 
       logger.info("Sending '" + methodType + "' request to URL : " + url);
@@ -103,7 +109,6 @@ public class Util {
       e.printStackTrace();
       throw new BaseException(responseCode,
           errorMessage.length() > 0 ? errorMessage : e.getMessage());
-
     }
 
   }
@@ -177,7 +182,7 @@ public class Util {
    *
    * @return String
    */
-  private String setServiceURL(String endpoint) {
+  public String setServiceURL(String endpoint) {
 
     if ("/login".equals(endpoint)) {
       return "https://" + gateway_uri + "-" + environment + "." + domain + endpoint;
@@ -261,5 +266,23 @@ public class Util {
     // [2] - {java_http}
     // [3] - {servicePath}
     return serivceName[3];
+  }
+
+
+  /**
+   * Method name : getHeader.
+   * Description : HttpServletRequest in header to HttpHeaders.
+   *
+   * @param request
+   * @return HttpHeaders
+   */
+  public HttpHeaders getHeader(HttpServletRequest request){
+
+    HttpHeaders headers = new HttpHeaders();
+
+    headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+    headers.set("Authorization",request.getHeader("Authorization"));
+    return headers;
+
   }
 }
