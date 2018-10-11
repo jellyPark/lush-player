@@ -38,6 +38,8 @@ public class JavaAggregatorController {
   @Autowired
   private HttpUtil httpUtil;
 
+  @Autowired
+  private HttpServletRequest request;
 
   /**
    * Get service.
@@ -45,22 +47,29 @@ public class JavaAggregatorController {
    * @return ResponseEntity
    */
   @GetMapping
-  public ResponseEntity<Object> get(@RequestBody HttpServletRequest request) {
+  public ResponseEntity<Object> get() {
 
     Response response = new Response();
 
     //get uri
     String url = util.getUri();
+    System.out.println("####  url :   " + url);
+    System.out.println("####  request : " + request.getMethod());
+    System.out.println("#### TEST");
 
-    //setRequest(가공-토큰추출 및 리퀘스트가공)
-    //HttpRequest setRequest = util.setRequest(request);
+    //setRequest(토큰추출 및 리퀘스트가공)
+    //Map<String, Object> setRequest = util.setRequest(request);
+
+    //setEndpoint(엔드포인트 추출)
+    String endpoint = "";
+    //endpoint = util.getEndPoint(url);
 
     //get token value
     String tokenKey = "";
     //String tokenkey = util.getTokenKey(setRequest);
 
     if (tokenKey != null && !"".equals(tokenKey)) {
-//      Map<String, Object> serviceResponse = util.callService(tokenKey, setRequest);
+//      Map<String, Object> serviceResponse = util.callService(endpoint, tokenKey, setRequest);
 //
 //      response = util.bindingResponse(serviceResponse);
       return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
@@ -78,19 +87,32 @@ public class JavaAggregatorController {
    * @return ResponseEntity
    */
   @PostMapping
-  public ResponseEntity<Object> post(@RequestBody HttpServletRequest request,
-      Map<String, Object> params) {
+  public ResponseEntity<Object> post(@RequestBody Map<String, Object> params) {
+
+    System.out.println("#### request :  " + request.getMethod());
+    System.out.println("#### params :  " + params.toString());
 
     Response response = new Response();
-    //setRequest(가공-토큰추출 및 리퀘스트가공)
-    //HttpRequest setRequest = util.setRequest(request, params);
+
+    //get uri
+    String url = util.getUri();
+    System.out.println("####  url :   " + url);
+    System.out.println("####  request : " + request.getMethod());
+    System.out.println("#### TEST");
+
+    //setRequest(토큰추출 및 리퀘스트가공)
+    //Map<String, Object> setRequest = util.setRequest(request);
+
+    //setEndpoint(엔드포인트 추출)
+    String endpoint = "";
+    //endpoint = util.getEndPoint(url);
 
     //get token value
     String tokenKey = "";
     //String tokenkey = util.getTokenKey(setRequest);
 
     if (tokenKey != null && !"".equals(tokenKey)) {
-//      Map<String, Object> serviceResponse = util.callService(tokenKey, setRequest);
+//      Map<String, Object> serviceResponse = util.callService(endpoint, tokenKey, setRequest);
 //
 //      response = util.bindingResponse(serviceResponse);
 
@@ -106,15 +128,25 @@ public class JavaAggregatorController {
 
     Response response = new Response();
 
-    //setRequest(가공-토큰추출 및 리퀘스트가공)
-    //HttpRequest setRequest = util.setRequest(request, params);
+    //get uri
+    String url = util.getUri();
+    System.out.println("####  url :   " + url);
+    System.out.println("####  request : " + request.getMethod());
+    System.out.println("#### TEST");
+
+    //setRequest(토큰추출 및 리퀘스트가공)
+    //Map<String, Object> setRequest = util.setRequest(request);
+
+    //setEndpoint(엔드포인트 추출)
+    String endpoint = "";
+    //endpoint = util.getEndPoint(url);
 
     //get token value
     String tokenKey = "";
     //String tokenkey = util.getTokenKey(setRequest);
 
     if (tokenKey != null && !"".equals(tokenKey)) {
-//      Map<String, Object> serviceResponse = util.callService(tokenKey, setRequest);
+//      Map<String, Object> serviceResponse = util.callService(endpoint, tokenKey, setRequest);
 //
 //      response = util.bindingResponse(serviceResponse);
 
@@ -129,15 +161,25 @@ public class JavaAggregatorController {
 
     Response response = new Response();
 
-    //setRequest(가공-토큰추출 및 리퀘스트가공)
-    //HttpRequest setRequest = util.setRequest(request, params);
+    //get uri
+    String url = util.getUri();
+    System.out.println("####  url :   " + url);
+    System.out.println("####  request : " + request.getMethod());
+    System.out.println("#### TEST");
+
+    //setRequest(토큰추출 및 리퀘스트가공)
+    //Map<String, Object> setRequest = util.setRequest(request);
+
+    //setEndpoint(엔드포인트 추출)
+    String endpoint = "";
+    //endpoint = util.getEndPoint(url);
 
     //get token value
     String tokenKey = "";
     //String tokenkey = util.getTokenKey(setRequest);
 
     if (tokenKey != null && !"".equals(tokenKey)) {
-//      Map<String, Object> serviceResponse = util.callService(tokenKey, setRequest);
+//      Map<String, Object> serviceResponse = util.callService(endpoint, tokenKey, setRequest);
 //
 //      response = util.bindingResponse(serviceResponse);
 
