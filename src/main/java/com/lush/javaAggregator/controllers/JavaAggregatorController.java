@@ -1,7 +1,6 @@
 package com.lush.javaAggregator.controllers;
 
 
-import com.lush.javaAggregator.aggregator.ServiceNameAggregator;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
@@ -41,9 +40,6 @@ public class JavaAggregatorController {
   @Autowired
   private HttpServletRequest request;
 
-  @Autowired
-  private ServiceNameAggregator serviceNameAggregator;
-
   /**
    * Get service.
    *
@@ -58,10 +54,11 @@ public class JavaAggregatorController {
     //Map<String, Object> setRequest = util.setRequest(request);
     //get url
     String url = util.getUrl(request);
+    System.out.println("####  utl :  " + url);
 
     //get serviceName
     String serviceName = util.getServiceName(url);
-
+    System.out.println("#### serviceName  :  " + serviceName);
 //      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("GET",
 //         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
 
