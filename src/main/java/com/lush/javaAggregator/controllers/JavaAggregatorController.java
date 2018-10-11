@@ -5,6 +5,7 @@ import com.lush.javaAggregator.aggregator.ServiceNameAggregator;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -58,12 +59,12 @@ public class JavaAggregatorController {
     String serviceName = util.getServiceName(url);
     System.out.println("## getServiceName : " + serviceName);
 
-    //      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("GET",
-//         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
     System.out.println("####### Call Aggregator #######");
+    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator(
+        "GET", url, serviceName, new HashMap<String, Object>(), request);
 
 //      response = util.bindingResponse(serviceResponse);
-    System.out.println("####### return responseEntity #######");
+    System.out.println("####### Return responseEntity #######");
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
@@ -84,10 +85,9 @@ public class JavaAggregatorController {
     //get serviceName
     String serviceName = util.getServiceName(url);
 
-//      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("POST",
-//         url, serviceName, params, HttpServletRequest request);
-
-//      response = util.bindingResponse(serviceResponse);
+//  Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("POST",
+//      url, serviceName, params, request);
+//  response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
 
@@ -105,7 +105,7 @@ public class JavaAggregatorController {
     String serviceName = util.getServiceName(url);
 
 //      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("PUT",
-//         url, serviceName, params, HttpServletRequest request);
+//         url, serviceName, params, request);
 
 //      response = util.bindingResponse(serviceResponse);
 
@@ -123,8 +123,8 @@ public class JavaAggregatorController {
     //get serviceName
     String serviceName = util.getServiceName(url);
 
-//      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
-//         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
+//  Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
+//       url, serviceName, new HashMap<String, Object>(), request);
 
 //      response = util.bindingResponse(serviceResponse);
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
