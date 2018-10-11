@@ -359,4 +359,37 @@ public class Util {
     }
     return check;
   }
+
+  /**
+   * Method name : getUrl.
+   * Description : Request의 Url에서 ContextPath를 제외하고 가져온다.
+   *
+   * @param req
+   * @return
+   */
+  public String getUrl(HttpServletRequest req) {
+
+    //get url
+    String url = req.getRequestURL().toString();
+
+    return url.replace(req.getContextPath(), "");
+  }
+
+  /**
+   * Method name : getServiceName.
+   * Description : Url에서 Service Name만 가져온다.
+   *
+   * @param url
+   * @return
+   */
+  public String getServiceName(String url) {
+
+    String[] serivceName = url.split("/");
+
+    // [0] - http:
+    // [1] -
+    // [2] - {java_http}
+    // [3] - {servicePath}
+    return serivceName[3];
+  }
 }

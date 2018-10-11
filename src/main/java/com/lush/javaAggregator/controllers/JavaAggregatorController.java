@@ -51,12 +51,6 @@ public class JavaAggregatorController {
 
     Response response = new Response();
 
-    //get uri
-    String url = util.getUri();
-    System.out.println("####  url :   " + url);
-    System.out.println("####  request : " + request.getMethod());
-    System.out.println("#### TEST");
-
     //setRequest(토큰추출 및 리퀘스트가공)
     //Map<String, Object> setRequest = util.setRequest(request);
 
@@ -76,9 +70,7 @@ public class JavaAggregatorController {
     } else {
       throw new BaseException("Login FAIL.");
     }
-
   }
-
 
   /**
    * Post service.
