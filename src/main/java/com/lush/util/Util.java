@@ -5,11 +5,8 @@ import com.google.gson.JsonObject;
 import com.lush.javaAggregator.enums.ExceptionType;
 import com.lush.javaAggregator.enums.ResponseStatusType;
 import com.lush.javaAggregator.exceptions.BaseException;
-import com.lush.javaAggregator.modles.Audio;
 import com.lush.javaAggregator.modles.Response;
 import java.net.HttpURLConnection;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
@@ -149,32 +146,6 @@ public class Util {
   }
 
   /**
-   * Formatting Map object to Audio object.
-   *
-   * @param response
-   * @return Audio
-   */
-  public Audio bindingAudio(Map<String, Object> response) {
-
-    Audio audios = new Audio();
-
-    if (response.containsKey("data")) {
-      Map<String, Object> data = (Map<String, Object>) response.get("data"); // data만 꺼내옴
-
-      if (data.containsKey("audio")) {
-        Map<String, Object> audio = (Map<String, Object>) data.get("audio"); // audio 꺼내옴
-
-        ObjectMapper m = new ObjectMapper();
-        audios = m.convertValue(audio.get("audio_file"), Audio.class);
-
-      }
-    }
-
-    return audios;
-  }
-
-
-  /**
    * Method name : bindingJson.
    * Description : Map<String, Object> to JsonObject.
    *
@@ -200,16 +171,6 @@ public class Util {
    * Utils
    *******************************************************/
 
-//  /**
-//   * Method name : getUri.
-//   * Description : Get the endpoint.
-//   *
-//   * @return String
-//   */
-//  public String getUri() {
-//    return request.getRequestURI();
-//  }
-
   /**
    * Method name : setServiceURL.
    * Description : Create a microservice URL.
@@ -224,17 +185,6 @@ public class Util {
       return "https://" + gateway_uri + "-" + environment + "." + domain + "/service" + endpoint;
     }
   }
-
-//  /**
-//   * Method name : getMethodType.
-//   * Description : Get the method type of RequestMapping.
-//   *
-//   * @return String
-//   */
-//  public String getMethodType() {
-//    return request.getMethod();
-//  }
-
 
 //  /**
 //   * Method name : getParams.
@@ -279,4 +229,37 @@ public class Util {
 //    }
 //    return check;
 //  }
+
+  /**
+   * Method name : getUrl.
+   * Description : Request의 Url에서 ContextPath를 제외하고 가져온다.
+   *
+   * @param req
+   * @return
+   */
+  public String getUrl(HttpServletRequest req) {
+
+    //get url
+    String url = req.getRequestURL().toString();
+
+    return url.replace(req.getContextPath(), "");
+  }
+
+  /**
+   * Method name : getServiceName.
+   * Description : Url에서 Service Name만 가져온다.
+   *
+   * @param url
+   * @return
+   */
+  public String getServiceName(String url) {
+
+    String[] serivceName = url.split("/");
+
+    // [0] - http:
+    // [1] -
+    // [2] - {java_http}
+    // [3] - {servicePath}
+    return serivceName[3];
+  }
 }
