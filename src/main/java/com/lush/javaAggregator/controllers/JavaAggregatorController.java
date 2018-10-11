@@ -1,7 +1,7 @@
 package com.lush.javaAggregator.controllers;
 
 
-import com.lush.javaAggregator.exceptions.BaseException;
+import com.lush.javaAggregator.aggregator.ServiceNameAggregator;
 import com.lush.javaAggregator.modles.Response;
 import com.lush.javaAggregator.utils.HttpUtil;
 import com.lush.util.Util;
@@ -41,6 +41,9 @@ public class JavaAggregatorController {
   @Autowired
   private HttpServletRequest request;
 
+  @Autowired
+  private ServiceNameAggregator serviceNameAggregator;
+
   /**
    * Get service.
    *
@@ -53,23 +56,18 @@ public class JavaAggregatorController {
 
     //setRequest(토큰추출 및 리퀘스트가공)
     //Map<String, Object> setRequest = util.setRequest(request);
+    //get url
+    String url = util.getUrl(request);
 
-    //setEndpoint(엔드포인트 추출)
-    String endpoint = "";
-    //endpoint = util.getEndPoint(url);
+    //get serviceName
+    String serviceName = util.getServiceName(url);
 
-    //get token value
-    String tokenKey = "";
-    //String tokenkey = util.getTokenKey(setRequest);
+//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("GET",
+//         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
 
-    if (tokenKey != null && !"".equals(tokenKey)) {
-//      Map<String, Object> serviceResponse = util.callService(endpoint, tokenKey, setRequest);
-//
 //      response = util.bindingResponse(serviceResponse);
-      return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-    } else {
-      throw new BaseException("Login FAIL.");
-    }
+
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
   /**
@@ -81,37 +79,20 @@ public class JavaAggregatorController {
   @PostMapping
   public ResponseEntity<Object> post(@RequestBody Map<String, Object> params) {
 
-    System.out.println("#### request :  " + request.getMethod());
-    System.out.println("#### params :  " + params.toString());
-
     Response response = new Response();
 
     //get uri
-    String url = util.getUri();
-    System.out.println("####  url :   " + url);
-    System.out.println("####  request : " + request.getMethod());
-    System.out.println("#### TEST");
+    String uri = "";
 
-    //setRequest(토큰추출 및 리퀘스트가공)
-    //Map<String, Object> setRequest = util.setRequest(request);
+    //get serviceName
+    String serviceName = "";
 
-    //setEndpoint(엔드포인트 추출)
-    String endpoint = "";
-    //endpoint = util.getEndPoint(url);
+//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("POST",
+//         url, serviceName, params, HttpServletRequest request);
 
-    //get token value
-    String tokenKey = "";
-    //String tokenkey = util.getTokenKey(setRequest);
-
-    if (tokenKey != null && !"".equals(tokenKey)) {
-//      Map<String, Object> serviceResponse = util.callService(endpoint, tokenKey, setRequest);
-//
 //      response = util.bindingResponse(serviceResponse);
 
-      return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-    } else {
-      throw new BaseException("Login FAIL.");
-    }
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
 
   }
 
@@ -121,31 +102,17 @@ public class JavaAggregatorController {
     Response response = new Response();
 
     //get uri
-    String url = util.getUri();
-    System.out.println("####  url :   " + url);
-    System.out.println("####  request : " + request.getMethod());
-    System.out.println("#### TEST");
+    String uri = "";
 
-    //setRequest(토큰추출 및 리퀘스트가공)
-    //Map<String, Object> setRequest = util.setRequest(request);
+    //get serviceName
+    String serviceName = "";
 
-    //setEndpoint(엔드포인트 추출)
-    String endpoint = "";
-    //endpoint = util.getEndPoint(url);
+//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("PUT",
+//         url, serviceName, params, HttpServletRequest request);
 
-    //get token value
-    String tokenKey = "";
-    //String tokenkey = util.getTokenKey(setRequest);
-
-    if (tokenKey != null && !"".equals(tokenKey)) {
-//      Map<String, Object> serviceResponse = util.callService(endpoint, tokenKey, setRequest);
-//
 //      response = util.bindingResponse(serviceResponse);
 
-      return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-    } else {
-      throw new BaseException("Login FAIL.");
-    }
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
   @DeleteMapping
@@ -154,31 +121,16 @@ public class JavaAggregatorController {
     Response response = new Response();
 
     //get uri
-    String url = util.getUri();
-    System.out.println("####  url :   " + url);
-    System.out.println("####  request : " + request.getMethod());
-    System.out.println("#### TEST");
+    String uri = "";
 
-    //setRequest(토큰추출 및 리퀘스트가공)
-    //Map<String, Object> setRequest = util.setRequest(request);
+    //get serviceName
+    String serviceName = "";
 
-    //setEndpoint(엔드포인트 추출)
-    String endpoint = "";
-    //endpoint = util.getEndPoint(url);
+//      Map<String, Object> serviceResponse = serviceNameAggregator.serviceNameAggregator("DELETE",
+//         url, serviceName, new HashMap<String, Object>(), HttpServletRequest request);
 
-    //get token value
-    String tokenKey = "";
-    //String tokenkey = util.getTokenKey(setRequest);
-
-    if (tokenKey != null && !"".equals(tokenKey)) {
-//      Map<String, Object> serviceResponse = util.callService(endpoint, tokenKey, setRequest);
-//
 //      response = util.bindingResponse(serviceResponse);
-
-      return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-    } else {
-      throw new BaseException("Login FAIL.");
-    }
+    return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
 
 
