@@ -133,32 +133,6 @@ public class BaseController {
       response.setMessage("AppStatus is fail");
     }
 
-//    // Check status of database connection.
-//    if (health.getBody().contains("db")) {
-//      JsonObject temp = healthBody.get("details").getAsJsonObject();
-//      temp = temp.get("db").getAsJsonObject();
-//      String dbStatus = temp.get("status").getAsString();
-//
-//      if (!"UP".equals(dbStatus)) {
-//        response.setStatus(ResponseStatusType.FAIL);
-//        response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        response.setMessage("Database status is fail");
-//      }
-//    }
-//
-//    // Check status of redis connection.
-//    if (health.getBody().contains("redis")) {
-//      JsonObject temp = healthBody.get("details").getAsJsonObject();
-//      temp = temp.get("redis").getAsJsonObject();
-//      String redisStatus = temp.get("status").getAsString();
-//
-//      if (!"UP".equals(redisStatus)) {
-//        response.setStatus(ResponseStatusType.FAIL);
-//        response.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-//        response.setMessage("Redis status is fail");
-//      }
-//    }
-
     return response;
   }
 
@@ -170,6 +144,7 @@ public class BaseController {
    */
   @GetMapping("/")
   public ResponseEntity endpoints() throws UnknownHostException {
+
     // Get endpoints data.
     String uri = setUri("mappings");
     ResponseEntity<JsonNode> data = restTemplate.getForEntity(uri, JsonNode.class);

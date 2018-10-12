@@ -1,7 +1,6 @@
 package com.lush.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lush.javaAggregator.enums.ExceptionType;
 import com.lush.javaAggregator.enums.ResponseStatusType;
@@ -10,10 +9,8 @@ import com.lush.javaAggregator.modles.Response;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -44,18 +41,6 @@ public class Util {
   private String aggregator_prefix;
 
   /**
-   * Define Gson for json convert and parse.
-   */
-  @Autowired
-  private Gson gson;
-
-  /**
-   * Model mapper.
-   */
-  @Autowired
-  private ModelMapper modelMapper;
-
-  /**
    * Method name : callService.
    * Description : Call the service.
    *
@@ -64,9 +49,10 @@ public class Util {
    * @param serviceName
    * @param param
    * @param request
-   * @return
+   * @return Map
    */
-  public Map<String, Object> callService(String methodType, String url, String serviceName, Map<String, Object> param, HttpServletRequest request) {
+  public Map<String, Object> callService(String methodType, String url, String serviceName,
+      Map<String, Object> param, HttpServletRequest request) {
 
     RestTemplate restTemplate = new RestTemplate();
     Integer responseCode = 200;
@@ -74,38 +60,21 @@ public class Util {
     Map<String, Object> objectMap = null;
 
     try {
-      if ("POST".equals(methodType) || "PUT".equals(methodType)) {
 
-        HttpEntity<Object> httpEntity = new HttpEntity<Object>(param, getHeader(request));
+      HttpEntity<Object> httpEntity = new HttpEntity<Object>(param, getHeader(request));
+      ResponseEntity<Object> response = restTemplate
+          .exchange(url, HttpMethod.resolve(methodType), httpEntity, Object.class);
 
-        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.resolve(methodType), httpEntity, Object.class);
-
-        responseCode = response.getStatusCodeValue();
-        ObjectMapper mapper = new ObjectMapper();
-        objectMap = mapper.convertValue(response.getBody(), Map.class);
-
-      } else {
-
-        HttpEntity<Object> httpEntity = new HttpEntity<Object>(getHeader(request));
-
-        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.resolve(methodType), httpEntity, Object.class);
-
-        responseCode = response.getStatusCodeValue();
-        ObjectMapper mapper = new ObjectMapper();
-        objectMap = mapper.convertValue(response.getBody(), Map.class);
-
-      }
-
-      logger.info("Sending '" + methodType + "' request to URL : " + url);
+      responseCode = response.getStatusCodeValue();
+      ObjectMapper mapper = new ObjectMapper();
+      objectMap = mapper.convertValue(response.getBody(), Map.class);
 
       if (responseCode == HttpURLConnection.HTTP_OK) {
         return objectMap;
-
       } else {
         throw new BaseException().setCommonExceptoin(ExceptionType.NOT_FOUND_DATA);
       }
     } catch (Exception e) {
-
       e.printStackTrace();
       throw new BaseException(responseCode,
           errorMessage.length() > 0 ? errorMessage : e.getMessage());
@@ -118,7 +87,8 @@ public class Util {
  *******************************************************/
 
   /**
-   * Formatting Map object to Response object.
+   * Method name : bindingResponse.
+   * Description : Formatting Map object to Response object.
    *
    * @param resultMap
    * @return Response
@@ -159,8 +129,6 @@ public class Util {
    */
   public JsonObject bindingJson(Map<String, Object> parameter) {
 
-    logger.info("RequestParams : " + parameter);
-
     JsonObject jsonParameter = new JsonObject();
 
     for (Map.Entry<String, Object> entry : parameter.entrySet()) {
@@ -191,56 +159,12 @@ public class Util {
     }
   }
 
-//  /**
-//   * Method name : getParams.
-//   * Description :
-//   *
-//   * @return Map
-//   */
-//  public Map<String, Object> getParams(Map<String, Object> params) throws Exception {
-//    Map<String, Object> reqMap = new HashMap<String, Object>();
-//
-//    if (params.equals("")) {
-//      logger.info("requestParams is null");
-//    } else {
-//      String methodType = request.getMethod();
-//      if (methodType.equals("POST") || methodType.equals("PUT")) {
-//        reqMap.putAll(params);
-//      } else {
-//        Enumeration e = request.getParameterNames();
-//        while (e.hasMoreElements()) {
-//          String strKey = (String) e.nextElement();
-//          Object strVal[] = request.getParameterValues(strKey);
-//          if (!reqMap.containsKey(strKey)) {
-//            reqMap.put(strKey, strVal[0]);
-//          }
-//        }
-//      }
-//    }
-//    return reqMap;
-//  }
-//
-//  public boolean checkPageNum() throws Exception {
-//    boolean check = true;
-//    String methodType = request.getMethod();
-//    System.out.println("  request.getParameter : " + request.getParameter("page"));
-//    if (methodType.equals("GET")) {
-//      String pageNum = request.getParameter("page");
-//      if (pageNum != null) {
-//        if (Integer.parseInt(pageNum) < 0) {
-//          check = false;
-//        }
-//      }
-//    }
-//    return check;
-//  }
-
   /**
    * Method name : getUrl.
    * Description : Request의 Url에서 ContextPath를 제외하고 가져온다.
    *
    * @param req
-   * @return
+   * @return String
    */
   public String getUrl(HttpServletRequest req) {
 
@@ -276,12 +200,12 @@ public class Util {
    * @param request
    * @return HttpHeaders
    */
-  public HttpHeaders getHeader(HttpServletRequest request){
+  public HttpHeaders getHeader(HttpServletRequest request) {
 
     HttpHeaders headers = new HttpHeaders();
 
     headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-    headers.set("Authorization",request.getHeader("Authorization"));
+    headers.set("Authorization", request.getHeader("Authorization"));
     return headers;
 
   }

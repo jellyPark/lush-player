@@ -46,28 +46,25 @@ public class JavaAggregatorController {
    *
    * @return ResponseEntity
    */
-  @GetMapping(value = "/get")
+  @GetMapping("/get")
   public ResponseEntity<Object> get() {
 
-    Response response = new Response();
-
-    //get url
+    // Get url.
     String url = util.getUrl(request);
-//    String url = util.setServiceURL("/podcasts/podcasts"); // test
-    System.out.println("####  url :  " + url);
 
-    //get serviceName
+    // Get serviceName.
     String serviceName = util.getServiceName(url);
 
-
-    System.out.println("####### Call Aggregator #######");
+    // Call service aggregator.
     Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("GET",
-         url, serviceName, new HashMap<String, Object>(), request);
+        url, serviceName, new HashMap<String, Object>(), request);
 
+    // Change data map type to response type.
+    Response response = new Response();
     response = util.bindingResponse(serviceResponse);
 
-    System.out.println("####### Return responseEntity #######");
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+
   }
 
   /**
@@ -76,66 +73,78 @@ public class JavaAggregatorController {
    * @param params
    * @return ResponseEntity
    */
-  @PostMapping("/post")
-  public ResponseEntity<Object> post(@RequestBody Map<String, Object> params) throws Exception{
+  @PostMapping
+  public ResponseEntity<Object> post(@RequestBody Map<String, Object> params) throws Exception {
 
-    Response response = new Response();
-
-    //get url
+    // Get url.
     String url = util.getUrl(request);
-//    String url = util.setServiceURL("/podcasts/podcasts"); //test
 
-    //get serviceName
+    // Get serviceName.
     String serviceName = util.getServiceName(url);
 
+    // Call service aggregator.
     Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("POST",
-         url, serviceName, params, request);
+        url, serviceName, params, request);
 
+    // Change data map type to response type.
+    Response response = new Response();
     response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
 
   }
 
-  @PutMapping("/put")
+  /**
+   * Put service.
+   *
+   * @param params
+   * @return ResponseEntity
+   */
+  @PutMapping
   public ResponseEntity<Object> put(@RequestBody Map<String, Object> params) {
 
-    Response response = new Response();
-
-    //get url
+    // Get url.
     String url = util.getUrl(request);
-//    String url = util.setServiceURL("/podcasts/podcasts/41"); //test
 
-    //get serviceName
+    // Get serviceName.
     String serviceName = util.getServiceName(url);
 
-      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("PUT",
-         url, serviceName, params, request);
+    // Call service aggregator.
+    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("PUT",
+        url, serviceName, params, request);
 
-      response = util.bindingResponse(serviceResponse);
+    // Change data map type to response type.
+    Response response = new Response();
+    response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
+
   }
 
-  @DeleteMapping("delete")
+  /**
+   * Delete servcie.
+   *
+   * @return ResponseEntity
+   */
+  @DeleteMapping
   public ResponseEntity<Object> delete() {
 
-    Response response = new Response();
-
-    //get url
+    // Get url.
     String url = util.getUrl(request);
-//    String url = util.setServiceURL("/podcasts/podcasts/41");  //test
 
-    //get serviceName
+    // Get serviceName.
     String serviceName = util.getServiceName(url);
 
-      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
-         url, serviceName, new HashMap<String, Object>(), request);
+    // Call service aggregator.
+    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
+        url, serviceName, new HashMap<String, Object>(), request);
 
-      response = util.bindingResponse(serviceResponse);
+    // Change data map type to response type.
+    Response response = new Response();
+    response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
-  }
 
+  }
 
 }
