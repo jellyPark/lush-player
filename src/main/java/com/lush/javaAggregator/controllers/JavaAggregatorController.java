@@ -59,10 +59,9 @@ public class JavaAggregatorController {
     //get serviceName
     String serviceName = util.getServiceName(url);
 
-
     System.out.println("####### Call Aggregator #######");
     Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("GET",
-         url, serviceName, new HashMap<String, Object>(), request);
+        url, serviceName, new HashMap<String, Object>(), request);
 
     response = util.bindingResponse(serviceResponse);
 
@@ -77,7 +76,7 @@ public class JavaAggregatorController {
    * @return ResponseEntity
    */
   @PostMapping("/post")
-  public ResponseEntity<Object> post(@RequestBody Map<String, Object> params) throws Exception{
+  public ResponseEntity<Object> post(@RequestBody Map<String, Object> params) throws Exception {
 
     Response response = new Response();
 
@@ -89,7 +88,7 @@ public class JavaAggregatorController {
     String serviceName = util.getServiceName(url);
 
     Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("POST",
-         url, serviceName, params, request);
+        url, serviceName, params, request);
 
     response = util.bindingResponse(serviceResponse);
 
@@ -109,10 +108,10 @@ public class JavaAggregatorController {
     //get serviceName
     String serviceName = util.getServiceName(url);
 
-      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("PUT",
-         url, serviceName, params, request);
+    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("PUT",
+        url, serviceName, params, request);
 
-      response = util.bindingResponse(serviceResponse);
+    response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
@@ -129,10 +128,10 @@ public class JavaAggregatorController {
     //get serviceName
     String serviceName = util.getServiceName(url);
 
-      Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
-         url, serviceName, new HashMap<String, Object>(), request);
+    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
+        url, serviceName, new HashMap<String, Object>(), request);
 
-      response = util.bindingResponse(serviceResponse);
+    response = util.bindingResponse(serviceResponse);
 
     return new ResponseEntity<>(response, httpUtil.getResponseHeaders(), HttpStatus.OK);
   }
