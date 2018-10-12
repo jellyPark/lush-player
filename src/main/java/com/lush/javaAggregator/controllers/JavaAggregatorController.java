@@ -46,7 +46,7 @@ public class JavaAggregatorController {
    *
    * @return ResponseEntity
    */
-  @GetMapping("/get")
+  @GetMapping
   public ResponseEntity<Object> get() {
 
     // Get url.
