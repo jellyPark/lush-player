@@ -1,7 +1,7 @@
-package com.lush.javaAggregator.exceptions;
+package com.lush.lushPlayer.exceptions;
 
-import com.lush.javaAggregator.enums.ExceptionType;
-import com.lush.javaAggregator.enums.ResponseStatusType;
+import com.lush.lushPlayer.enums.ExceptionType;
+import com.lush.lushPlayer.enums.ResponseStatusType;
 import org.springframework.http.HttpStatus;
 
 public class BaseException extends RuntimeException {

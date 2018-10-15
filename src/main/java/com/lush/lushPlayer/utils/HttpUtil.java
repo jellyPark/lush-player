@@ -1,7 +1,7 @@
-package com.lush.javaAggregator.utils;
+package com.lush.lushPlayer.utils;
 
-import com.lush.javaAggregator.enums.ResponseStatusType;
-import com.lush.javaAggregator.modles.Response;
+import com.lush.lushPlayer.enums.ResponseStatusType;
+import com.lush.lushPlayer.modles.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

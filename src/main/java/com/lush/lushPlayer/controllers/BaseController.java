@@ -1,14 +1,14 @@
-package com.lush.javaAggregator.controllers;
+package com.lush.lushPlayer.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.lush.javaAggregator.enums.ResponseStatusType;
-import com.lush.javaAggregator.exceptions.BaseException;
-import com.lush.javaAggregator.modles.Endpoint;
-import com.lush.javaAggregator.modles.Response;
-import com.lush.javaAggregator.modles.ServiceInfo;
-import com.lush.javaAggregator.utils.HttpUtil;
+import com.lush.lushPlayer.enums.ResponseStatusType;
+import com.lush.lushPlayer.exceptions.BaseException;
+import com.lush.lushPlayer.modles.Endpoint;
+import com.lush.lushPlayer.modles.Response;
+import com.lush.lushPlayer.modles.ServiceInfo;
+import com.lush.lushPlayer.utils.HttpUtil;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;

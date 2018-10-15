@@ -1,6 +1,6 @@
-package com.lush.javaAggregator.modles;
+package com.lush.lushPlayer.modles;
 
-import com.lush.javaAggregator.enums.ResponseStatusType;
+import com.lush.lushPlayer.enums.ResponseStatusType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 

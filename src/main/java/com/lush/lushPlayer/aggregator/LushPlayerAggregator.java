@@ -1,4 +1,4 @@
-package com.lush.javaAggregator.aggregator;
+package com.lush.lushPlayer.aggregator;
 
 import com.lush.util.Util;
 import java.util.HashMap;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ServiceNameAggregator {
+public class LushPlayerAggregator {
 
-  static final Logger logger = LoggerFactory.getLogger(ServiceNameAggregator.class);
+  static final Logger logger = LoggerFactory.getLogger(LushPlayerAggregator.class);
 
   @Autowired
   private Util util;

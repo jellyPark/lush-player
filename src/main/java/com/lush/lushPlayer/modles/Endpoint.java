@@ -1,4 +1,4 @@
-package com.lush.javaAggregator.modles;
+package com.lush.lushPlayer.modles;
 
 import org.springframework.http.HttpMethod;
 

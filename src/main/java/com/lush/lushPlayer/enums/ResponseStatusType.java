@@ -1,4 +1,4 @@
-package com.lush.javaAggregator.enums;
+package com.lush.lushPlayer.enums;
 
 /**
  * ResponseStatus

@@ -1,9 +1,9 @@
-package com.lush.javaAggregator.controllers;
+package com.lush.lushPlayer.controllers;
 
 
-import com.lush.javaAggregator.aggregator.ServiceNameAggregator;
-import com.lush.javaAggregator.modles.Response;
-import com.lush.javaAggregator.utils.HttpUtil;
+import com.lush.lushPlayer.aggregator.LushPlayerAggregator;
+import com.lush.lushPlayer.modles.Response;
+import com.lush.lushPlayer.utils.HttpUtil;
 import com.lush.util.Util;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class JavaAggregatorController {
+public class LushPlayerAggregatorController {
 
-  static final Logger logger = LoggerFactory.getLogger(JavaAggregatorController.class);
+  static final Logger logger = LoggerFactory.getLogger(LushPlayerAggregatorController.class);
 
   @Autowired
   private Util util;
@@ -39,7 +39,7 @@ public class JavaAggregatorController {
   private HttpServletRequest request;
 
   @Autowired
-  private ServiceNameAggregator serviceNameAggregator;
+  private LushPlayerAggregator lushPlayerAggregator;
 
   /**
    * Get service.
@@ -56,7 +56,7 @@ public class JavaAggregatorController {
     String serviceName = util.getServiceName(url);
 
     // Call service aggregator.
-    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("GET",
+    Map<String, Object> serviceResponse = lushPlayerAggregator.callServiceNameAggregator("GET",
         url, serviceName, new HashMap<String, Object>(), request);
 
     // Change data map type to response type.
@@ -83,7 +83,7 @@ public class JavaAggregatorController {
     String serviceName = util.getServiceName(url);
 
     // Call service aggregator.
-    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("POST",
+    Map<String, Object> serviceResponse = lushPlayerAggregator.callServiceNameAggregator("POST",
         url, serviceName, params, request);
 
     // Change data map type to response type.
@@ -110,7 +110,7 @@ public class JavaAggregatorController {
     String serviceName = util.getServiceName(url);
 
     // Call service aggregator.
-    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("PUT",
+    Map<String, Object> serviceResponse = lushPlayerAggregator.callServiceNameAggregator("PUT",
         url, serviceName, params, request);
 
     // Change data map type to response type.
@@ -136,7 +136,7 @@ public class JavaAggregatorController {
     String serviceName = util.getServiceName(url);
 
     // Call service aggregator.
-    Map<String, Object> serviceResponse = serviceNameAggregator.callServiceNameAggregator("DELETE",
+    Map<String, Object> serviceResponse = lushPlayerAggregator.callServiceNameAggregator("DELETE",
         url, serviceName, new HashMap<String, Object>(), request);
 
     // Change data map type to response type.

@@ -2,10 +2,10 @@ package com.lush.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
-import com.lush.javaAggregator.enums.ExceptionType;
-import com.lush.javaAggregator.enums.ResponseStatusType;
-import com.lush.javaAggregator.exceptions.BaseException;
-import com.lush.javaAggregator.modles.Response;
+import com.lush.lushPlayer.enums.ExceptionType;
+import com.lush.lushPlayer.enums.ResponseStatusType;
+import com.lush.lushPlayer.exceptions.BaseException;
+import com.lush.lushPlayer.modles.Response;
 import java.net.HttpURLConnection;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
